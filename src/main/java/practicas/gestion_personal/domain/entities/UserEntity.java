@@ -2,11 +2,13 @@ package practicas.gestion_personal.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +27,13 @@ public class UserEntity implements Serializable {
     private String name;
     @Column(name = "apellidos",nullable = false,length = 40)
     private String lastName;
+    @Column(unique = true)
+    private String email;
+    private String password;
     @Column(name = "profesion")
     private String profession;
     @Column(name = "fechaNacimiento")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     /*relation with AssignmentUserService*/
     @OneToMany(mappedBy = "user"

@@ -16,6 +16,7 @@ public class HeadServiceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idJefeServicio")
     private Long idHeadService;
+    private Boolean status;
     @Column(name = "inicioPosicion")
     private Date startDate;
     @Column(name = "finPosicion")
