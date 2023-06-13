@@ -26,5 +26,10 @@ public class UserController {
     public ResponseEntity<?> create(@RequestBody UserRequest request){
         return ResponseEntity.ok(userService.createUser(request));
     }
+    @DeleteMapping("{dni}")
+    public ResponseEntity<?> delete(@PathVariable String dni){
+        userService.deleteUser(dni);
+        return ResponseEntity.noContent().build();
+    }
 
 }
