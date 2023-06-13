@@ -1,4 +1,4 @@
-package practicas.gestion_personal.api.models.request;
+package practicas.gestion_personal.api.models.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class WorkConditionRequest implements Serializable {
+public class SimpleResponse implements Serializable {
+    private Long id;
     private String name;
     private String code;
     private String description;
