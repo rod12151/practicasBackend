@@ -9,6 +9,7 @@ import practicas.gestion_personal.domain.entities.UserEntity;
 import practicas.gestion_personal.domain.repositories.UserRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.UserService;
 import practicas.gestion_personal.mapper.UserMapping;
+import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.util.HashSet;
 
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private UserMapping userMapping;
     @Override
     public UserResponse findByDni(String dni) {
-        UserEntity userDb=userRepository.findByDni(dni).orElseThrow();
+        UserEntity userDb=userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
     return userMapping.userEntityToResponse(userDb);
     }
 
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(String dni, UserRequest request) {
-        UserEntity userUpdate=userRepository.findByDni(dni).orElseThrow();
+        UserEntity userUpdate=userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
         userUpdate.setDni(request.getDni());
         userUpdate.setName(request.getName());
         userUpdate.setLastName(request.getLastName());
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String dni) {
-        UserEntity userDb = userRepository.findByDni(dni).orElseThrow();
+        UserEntity userDb = userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
         userRepository.delete(userDb);
 
     }

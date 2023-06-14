@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.api.models.request.ServiceRequest;
 import practicas.gestion_personal.api.models.response.ServiceResponse;
-import practicas.gestion_personal.api.models.response.UserResponse;
 import practicas.gestion_personal.domain.entities.ServiceEntity;
 import practicas.gestion_personal.domain.repositories.ServiceRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.ServiceService;
+import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 @Service
 @AllArgsConstructor
@@ -23,7 +22,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     @Transactional(readOnly = true)
     public ServiceResponse findByCode(String code) {
-        ServiceEntity service = serviceRepository.findByCode(code).orElseThrow();
+        ServiceEntity service = serviceRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("Service"));
 
         return modelMapper.map(service, ServiceResponse.class);
 
@@ -56,7 +55,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     @Transactional()
     public void delete(String code) {
-        ServiceEntity service =serviceRepository.findByCode(code).orElseThrow();
+        ServiceEntity service =serviceRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("Service"));
         serviceRepository.delete(service);
 
     }
@@ -64,7 +63,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     @Transactional()
     public ServiceResponse update(String code, ServiceRequest request) {
-        ServiceEntity serviceUpdate =serviceRepository.findByCode(code).orElseThrow();
+        ServiceEntity serviceUpdate =serviceRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("service"));
         serviceUpdate.setCode(request.getCode());
         serviceUpdate.setName(request.getName());
         serviceUpdate.setDescription(request.getDescription());

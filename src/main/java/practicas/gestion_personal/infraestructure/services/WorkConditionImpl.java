@@ -8,6 +8,7 @@ import practicas.gestion_personal.api.models.response.SimpleResponse;
 import practicas.gestion_personal.domain.entities.WorkConditionEntity;
 import practicas.gestion_personal.domain.repositories.WorkConditionRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.WorkConditionService;
+import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,7 @@ public class WorkConditionImpl implements WorkConditionService {
     private ModelMapper modelMapper;
     @Override
     public SimpleResponse findByCode(String code) {
-        WorkConditionEntity workCondition =workConditionRepository.findByCode(code).orElseThrow();
+        WorkConditionEntity workCondition =workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
 
         return modelMapper.map(workCondition,SimpleResponse.class);
     }
@@ -48,7 +49,7 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public SimpleResponse update(String code, SimpleRequest request) {
-        WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow();
+        WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
         workConditionUpdate.setCode(request.getCode());
         workConditionUpdate.setName(request.getName());
         workConditionUpdate.setDescription(request.getDescription());
@@ -58,7 +59,7 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public void delete(String code) {
-        WorkConditionEntity workCondition = workConditionRepository.findByCode(code).orElseThrow();
+        WorkConditionEntity workCondition = workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
         workConditionRepository.delete(workCondition);
 
     }

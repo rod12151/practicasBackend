@@ -13,6 +13,7 @@ import practicas.gestion_personal.domain.repositories.LaborRegimeRepository;
 import practicas.gestion_personal.domain.repositories.UserRepository;
 import practicas.gestion_personal.domain.repositories.WorkConditionRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.ContractService;
+import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -28,18 +29,18 @@ public class ContractServiceImpl implements ContractService {
     @Override
     @Transactional(readOnly = true)
     public Set<ContractEntity> findByUserDni(String dni) {
-        UserEntity user =userRepository.findByDni(dni).orElseThrow();
+        UserEntity user =userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
 
         return contractRepository.findAllByUser_Dni(dni);
     }
     @Override
     public Set<ContractEntity> findByLaborRegimeCode(String code) {
-        LaborRegimeEntity laborRegime=laborRegimeRepository.findByCode(code).orElseThrow();
+        LaborRegimeEntity laborRegime=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
         return contractRepository.findByLaborRegime_Code(code);
     }
     @Override
     public Set<ContractEntity> findByWorkConditionCode(String code) {
-        WorkConditionEntity workCondition=workConditionRepository.findByCode(code).orElseThrow();
+        WorkConditionEntity workCondition=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
 
         return contractRepository.findByWorkCondition_Code(code);
     }
@@ -70,9 +71,9 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public ContractEntity createContract(ContractRequest request) {
-        UserEntity userEntity=userRepository.findByDni(request.getDniUser()).orElseThrow();
-        WorkConditionEntity workCondition =workConditionRepository.findByCode(request.getCodeWorkCondition()).orElseThrow();
-        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(request.getCodeLaborRegime()).orElseThrow();
+        UserEntity userEntity=userRepository.findByDni(request.getDniUser()).orElseThrow(()->new IdNotFoundException("User"));
+        WorkConditionEntity workCondition =workConditionRepository.findByCode(request.getCodeWorkCondition()).orElseThrow(()->new IdNotFoundException("WorkCondition"));
+        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(request.getCodeLaborRegime()).orElseThrow(()->new IdNotFoundException("laborRegime"));
         ContractEntity contract=ContractEntity.builder()
                 .user(userEntity)
                 .position(request.getPosition())
@@ -86,10 +87,10 @@ public class ContractServiceImpl implements ContractService {
     }
     @Override
     public ContractEntity updateContract(Long id, ContractRequest request) {
-        ContractEntity contractUpdate = contractRepository.findById(id).orElseThrow();
-        UserEntity userEntity=userRepository.findByDni(request.getDniUser()).orElseThrow();
-        WorkConditionEntity workCondition =workConditionRepository.findByCode(request.getCodeWorkCondition()).orElseThrow();
-        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(request.getCodeLaborRegime()).orElseThrow();
+        ContractEntity contractUpdate = contractRepository.findById(id).orElseThrow(()->new IdNotFoundException("contract"));
+        UserEntity userEntity=userRepository.findByDni(request.getDniUser()).orElseThrow(()->new IdNotFoundException("User"));
+        WorkConditionEntity workCondition =workConditionRepository.findByCode(request.getCodeWorkCondition()).orElseThrow(()->new IdNotFoundException("workCondition"));
+        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(request.getCodeLaborRegime()).orElseThrow(()->new IdNotFoundException("laborRegime"));
         contractUpdate.setUser(userEntity);
         contractUpdate.setLaborRegime(laborRegime);
         contractUpdate.setWorkCondition(workCondition);
@@ -103,7 +104,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public void deleteContract(Long id) {
-        ContractEntity contract = contractRepository.findById(id).orElseThrow();
+        ContractEntity contract = contractRepository.findById(id).orElseThrow(()->new IdNotFoundException("contract"));
         contractRepository.delete(contract);
 
     }

@@ -8,6 +8,7 @@ import practicas.gestion_personal.api.models.response.SimpleResponse;
 import practicas.gestion_personal.domain.entities.LaborRegimeEntity;
 import practicas.gestion_personal.domain.repositories.LaborRegimeRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.LaborRegimeService;
+import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,7 @@ public class LaborRegimeImpl implements LaborRegimeService {
     private ModelMapper modelMapper;
     @Override
     public SimpleResponse findByCode(String code) {
-        LaborRegimeEntity laborRegime =laborRegimeRepository.findByCode(code).orElseThrow();
+        LaborRegimeEntity laborRegime =laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
 
         return modelMapper.map(laborRegime,SimpleResponse.class);
     }
@@ -48,7 +49,7 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public SimpleResponse update(String code, SimpleRequest request) {
-        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow();
+        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
         laborRegimeUpdate.setCode(request.getCode());
         laborRegimeUpdate.setName(request.getName());
         laborRegimeUpdate.setDescription(request.getDescription());
@@ -58,7 +59,7 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public void delete(String code) {
-        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(code).orElseThrow();
+        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
         laborRegimeRepository.delete(laborRegime);
 
     }
