@@ -1,5 +1,6 @@
 package practicas.gestion_personal.api.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +22,11 @@ public class WorkConditionController {
     return ResponseEntity.ok(workConditionService.findAll());
     }
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody SimpleRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody SimpleRequest request){
     return ResponseEntity.ok(workConditionService.create(request));
     }
     @PutMapping("update/{code}")
-    public ResponseEntity<?> update(@PathVariable String code, @RequestBody SimpleRequest request){
+    public ResponseEntity<?> update(@Valid @PathVariable String code, @RequestBody SimpleRequest request){
     return ResponseEntity.ok(workConditionService.update(code, request));
     }
     @DeleteMapping({"delete/{code}"})

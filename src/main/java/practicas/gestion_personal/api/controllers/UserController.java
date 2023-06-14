@@ -1,5 +1,6 @@
 package practicas.gestion_personal.api.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class UserController {
 
     }
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody UserRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody UserRequest request){
         return ResponseEntity.ok(userService.createUser(request));
     }
     @DeleteMapping("{dni}")

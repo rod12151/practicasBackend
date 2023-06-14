@@ -1,4 +1,4 @@
-package practicas.gestion_personal.api.models.request;
+package practicas.gestion_personal.api.models.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

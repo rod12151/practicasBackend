@@ -1,5 +1,6 @@
 package practicas.gestion_personal.api.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +22,11 @@ public class ServiceController {
         return ResponseEntity.ok(serviceService.findAll());
     }
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody ServiceRequest request){
+    public ResponseEntity<?> create( @Valid @RequestBody ServiceRequest request){
         return ResponseEntity.ok(serviceService.create(request));
     }
     @PutMapping("{code}")
-    public ResponseEntity<?> update(@PathVariable String code,@RequestBody ServiceRequest request){
+    public ResponseEntity<?> update(@Valid @PathVariable String code,@RequestBody ServiceRequest request){
         return ResponseEntity.ok(serviceService.update(code,request));
     }
     @DeleteMapping("{code}")
