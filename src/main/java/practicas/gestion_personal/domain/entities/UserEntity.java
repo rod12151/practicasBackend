@@ -1,5 +1,7 @@
 package practicas.gestion_personal.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,14 +40,17 @@ public class UserEntity implements Serializable {
     /*relation with AssignmentUserService*/
     @OneToMany(mappedBy = "user"
     )
+    @JsonIgnore
     private Set<AssignmentUserServiceEntity> assignment=new HashSet<>();
 
     /*relation with HeaderService*/
     @OneToMany(mappedBy = "user"
     )
+    @JsonIgnore
     private Set<HeadServiceEntity> boss=new HashSet<>();
 
     /*relation with Contract*/
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<ContractEntity> contracts;
 }

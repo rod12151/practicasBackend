@@ -1,7 +1,9 @@
 package practicas.gestion_personal.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class WorkConditionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +27,7 @@ public class WorkConditionEntity {
     private String description;
     /*relation with workCondition*/
     @OneToMany(mappedBy = "workCondition")
+    @JsonIgnore
     private Set<ContractEntity> contract=new HashSet<>();
 
 
