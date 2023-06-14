@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.api.models.request.ContractRequest;
+import practicas.gestion_personal.api.models.response.ContractResponse;
 import practicas.gestion_personal.domain.entities.ContractEntity;
 import practicas.gestion_personal.domain.entities.LaborRegimeEntity;
 import practicas.gestion_personal.domain.entities.UserEntity;
@@ -13,9 +14,11 @@ import practicas.gestion_personal.domain.repositories.LaborRegimeRepository;
 import practicas.gestion_personal.domain.repositories.UserRepository;
 import practicas.gestion_personal.domain.repositories.WorkConditionRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.ContractService;
+import practicas.gestion_personal.mapper.ContractMapping;
 import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 @Service
 @AllArgsConstructor
@@ -26,51 +29,64 @@ public class ContractServiceImpl implements ContractService {
 
     private WorkConditionRepository workConditionRepository;
     private LaborRegimeRepository laborRegimeRepository;
+
+    private ContractMapping contractMapping;
     @Override
     @Transactional(readOnly = true)
-    public Set<ContractEntity> findByUserDni(String dni) {
+    public Set<ContractResponse> findByUserDni(String dni) {
         UserEntity user =userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
+        Set<ContractResponse> response=new HashSet<>();
+        var contract= contractRepository.findAllByUser_Dni(dni);
+        for (ContractEntity res:contract){
+            ContractResponse aux =contractMapping.entityToResponse(res);
+            response.add(aux);
 
-        return contractRepository.findAllByUser_Dni(dni);
+        }
+        return response;
     }
     @Override
-    public Set<ContractEntity> findByLaborRegimeCode(String code) {
+    public Set<ContractResponse> findByLaborRegimeCode(String code) {
         LaborRegimeEntity laborRegime=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
-        return contractRepository.findByLaborRegime_Code(code);
+        Set<ContractResponse> response=new HashSet<>();
+        var contract= contractRepository.findByLaborRegime_Code(code);
+        for (ContractEntity res:contract){
+            ContractResponse aux =contractMapping.entityToResponse(res);
+            response.add(aux);
+
+        }
+        return response;
     }
     @Override
-    public Set<ContractEntity> findByWorkConditionCode(String code) {
+    public Set<ContractResponse> findByWorkConditionCode(String code) {
         WorkConditionEntity workCondition=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+        Set<ContractResponse> response=new HashSet<>();
+        var contract= contractRepository.findByWorkCondition_Code(code);
+        for (ContractEntity res:contract){
+            ContractResponse aux =contractMapping.entityToResponse(res);
+            response.add(aux);
 
-        return contractRepository.findByWorkCondition_Code(code);
+        }
+        return response;
     }
     @Override
-    public Set<ContractEntity> findByStartDateAfter(LocalDate date) {
-        var a = contractRepository.findAllByStartDateIsAfter(date);
-        if(a.isEmpty()){
-            return null;
-        }
-        return a;
+    public Set<ContractResponse> findByStartDateAfter(LocalDate date) {
+        var contract = contractRepository.findAllByStartDateIsAfter(date);
+        return getContractResponses(contract);
     }
     @Override
-    public Set<ContractEntity> findByFinishDateBefore(LocalDate date) {
-        var a= contractRepository.findAllByFinishDateIsBefore(date);
-        if(a.isEmpty()){
-            return null;
-        }
-        return a;
-    }
-    @Override
-    public Set<ContractEntity> findByStartDateAndFinishDate(LocalDate startDate, LocalDate finishDate) {
-        var a= contractRepository.findAllByStartDateIsAfterAndFinishDateIsBeforeOrderByStartDate(startDate,finishDate);
-        if(a.isEmpty()){
-            return null;
-        }
-        return a;
+    public Set<ContractResponse> findByFinishDateBefore(LocalDate date) {
+        var contract= contractRepository.findAllByFinishDateIsBefore(date);
+        return getContractResponses(contract);
     }
 
     @Override
-    public ContractEntity createContract(ContractRequest request) {
+    public Set<ContractResponse> findByStartDateAndFinishDate(LocalDate startDate, LocalDate finishDate) {
+        var contract= contractRepository.findAllByStartDateIsAfterAndFinishDateIsBeforeOrderByStartDate(startDate,finishDate);
+        return getContractResponses(contract);
+    }
+
+    @Override
+    public ContractResponse createContract(ContractRequest request) {
         UserEntity userEntity=userRepository.findByDni(request.getDniUser()).orElseThrow(()->new IdNotFoundException("User"));
         WorkConditionEntity workCondition =workConditionRepository.findByCode(request.getCodeWorkCondition()).orElseThrow(()->new IdNotFoundException("WorkCondition"));
         LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(request.getCodeLaborRegime()).orElseThrow(()->new IdNotFoundException("laborRegime"));
@@ -83,10 +99,10 @@ public class ContractServiceImpl implements ContractService {
                 .workCondition(workCondition)
                 .build();
         contractRepository.save(contract);
-        return contract;
+        return contractMapping.entityToResponse(contract);
     }
     @Override
-    public ContractEntity updateContract(Long id, ContractRequest request) {
+    public ContractResponse updateContract(Long id, ContractRequest request) {
         ContractEntity contractUpdate = contractRepository.findById(id).orElseThrow(()->new IdNotFoundException("contract"));
         UserEntity userEntity=userRepository.findByDni(request.getDniUser()).orElseThrow(()->new IdNotFoundException("User"));
         WorkConditionEntity workCondition =workConditionRepository.findByCode(request.getCodeWorkCondition()).orElseThrow(()->new IdNotFoundException("workCondition"));
@@ -99,7 +115,7 @@ public class ContractServiceImpl implements ContractService {
         contractUpdate.setFinishDate(request.getFinishDate());
         contractRepository.save(contractUpdate);
 
-        return contractUpdate;
+        return contractMapping.entityToResponse(contractUpdate);
     }
 
     @Override
@@ -107,5 +123,19 @@ public class ContractServiceImpl implements ContractService {
         ContractEntity contract = contractRepository.findById(id).orElseThrow(()->new IdNotFoundException("contract"));
         contractRepository.delete(contract);
 
+    }
+
+
+    private Set<ContractResponse> getContractResponses(Set<ContractEntity> contract) {
+        Set<ContractResponse> response=new HashSet<>();
+        if(contract.isEmpty()){
+            return null;
+        }
+        for (ContractEntity res:contract){
+            ContractResponse aux =contractMapping.entityToResponse(res);
+            response.add(aux);
+
+        }
+        return response;
     }
 }
