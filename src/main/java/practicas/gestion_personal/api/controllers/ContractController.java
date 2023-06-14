@@ -1,5 +1,6 @@
 package practicas.gestion_personal.api.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class ContractController {
     private ContractService contractService;
     @PostMapping("create")
-    public ResponseEntity<?> create(@RequestBody ContractRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody ContractRequest request){
         return ResponseEntity.ok(contractService.createContract(request));
     }
     @GetMapping("filter/{dni}")
@@ -42,7 +43,7 @@ public class ContractController {
         return ResponseEntity.ok(contractService.findByStartDateAndFinishDate(startDate, finishDate));
     }
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestParam Long id ,@RequestBody ContractRequest request){
+    public ResponseEntity<?> update(@Valid @RequestParam Long id ,@RequestBody ContractRequest request){
         return ResponseEntity.ok(contractService.updateContract(id,request));
     }
     @DeleteMapping("delete")
