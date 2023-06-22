@@ -2,17 +2,24 @@ package practicas.gestion_personal.infraestructure.services;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.api.models.request.UserRequest;
 import practicas.gestion_personal.api.models.response.UserResponse;
+import practicas.gestion_personal.domain.entities.RoleEntity;
 import practicas.gestion_personal.domain.entities.UserEntity;
+import practicas.gestion_personal.domain.repositories.RoleRepository;
 import practicas.gestion_personal.domain.repositories.UserRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.UserService;
 import practicas.gestion_personal.mapper.UserMapping;
+import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -20,7 +27,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
+
     private UserMapping userMapping;
+
+    private PasswordEncoder passwordEncoder;
     @Override
     public UserResponse findByDni(String dni) {
         UserEntity userDb=userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
@@ -50,7 +61,6 @@ public class UserServiceImpl implements UserService {
         userUpdate.setDni(request.getDni());
         userUpdate.setName(request.getName());
         userUpdate.setLastName(request.getLastName());
-        userUpdate.setEmail(request.getEmail());
         userUpdate.setProfession(request.getProfession());
         userUpdate.setBirthDate(request.getBirthDate());
         userRepository.save(userUpdate);
@@ -60,14 +70,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserRequest request) {
+        var o = userRepository.findByDni(request.getDni());
+        RoleEntity rol = roleRepository.findByName("ROLE_USER").orElseThrow();
+        List<RoleEntity>roles=new ArrayList<>();
+        roles.add(rol);
+        if (o.isPresent()){
+            throw new IdDuplicate("DNI");
+        }
         UserEntity userCreate=UserEntity.builder()
                 .dni(request.getDni())
                 .name(request.getName())
                 .lastName(request.getLastName())
-                .email(request.getEmail())
+                .username(request.getDni()+"@hospital.huanta.pe")
                 .profession(request.getProfession())
                 .birthDate(request.getBirthDate())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .roles(roles)
                 .build();
         userRepository.save(userCreate);
         return userMapping.userEntityToResponse(userCreate);

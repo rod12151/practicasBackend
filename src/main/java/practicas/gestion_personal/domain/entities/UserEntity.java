@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "usuario")
@@ -29,8 +30,8 @@ public class UserEntity implements Serializable {
     private String name;
     @Column(name = "apellidos",nullable = false,length = 40)
     private String lastName;
-    @Column(unique = true)
-    private String email;
+    @Column(unique = true,name = "correo")
+    private String username;
     private String password;
     @Column(name = "profesion")
     private String profession;
@@ -53,4 +54,13 @@ public class UserEntity implements Serializable {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private Set<ContractEntity> contracts;
+
+    /*relation with roles*/
+    @ManyToMany
+    @JoinTable(name = "usersRoles",
+            joinColumns =@JoinColumn(name="userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"userId","roleId"})})
+    private List<RoleEntity> roles;
+
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import practicas.gestion_personal.api.models.response.ErrorResponse;
 import practicas.gestion_personal.api.models.response.ErrorsResponse;
+import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.util.ArrayList;
@@ -30,6 +31,15 @@ public class BadRequestController {
                 .forEach(error->errors.add(error.getDefaultMessage()));
         return ErrorsResponse.builder()
                 .errors(errors)
+                .status(HttpStatus.BAD_REQUEST.name())
+                .code(HttpStatus.BAD_REQUEST.value())
+                .build();
+
+    }
+    @ExceptionHandler(IdDuplicate.class)
+    public ErrorResponse IdDuplicate(IdDuplicate exception){
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST.name())
                 .code(HttpStatus.BAD_REQUEST.value())
                 .build();

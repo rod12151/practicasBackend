@@ -19,10 +19,12 @@ public class ModelMapperTest {
         user.setDni("78953486");
         user.setName("Joe");
         user.setLastName("doe");
+        user.setUsername(user.getDni()+"@hospital.huanta.com");
         UserResponse userResponse= userMapping.userEntityToResponse(user);
 
         assertEquals(user.getIdUser(),userResponse.getIdUser());
         assertEquals(user.getDni(),userResponse.getDni());
+        assertEquals(user.getUsername(),userResponse.getUsername());
         assertEquals(user.getName()+" "+user.getLastName(),userResponse.getFullName());
     }
     @Test

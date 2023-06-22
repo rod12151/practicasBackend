@@ -18,8 +18,6 @@ public class UserRequest {
     private String name;
     @NotBlank(message = "el Apellido es obligatorio")
     private String lastName;
-    @Email(message = " El correo debe tener el formato: example@....")
-    private String email;
     @Size(min = 6,message = "La contraseña debe tener mas de 6 caracteres")
     private String password;
     @NotBlank(message = "se debe ingresar una profesion")
