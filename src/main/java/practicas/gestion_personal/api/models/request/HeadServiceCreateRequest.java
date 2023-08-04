@@ -5,10 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class HeadServiceRequest implements Serializable {
+public class HeadServiceCreateRequest implements Serializable {
+
     private String codeService;
     private String dniUser;
+    private LocalDate startDate;
+    private LocalDate finishDate;
 }

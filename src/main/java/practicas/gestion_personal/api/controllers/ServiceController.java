@@ -9,11 +9,11 @@ import practicas.gestion_personal.api.models.request.ServiceRequest;
 import practicas.gestion_personal.infraestructure.abstract_services.ServiceService;
 
 @RestController
-@RequestMapping("service/")
+@RequestMapping("/service")
 @AllArgsConstructor
 public class ServiceController {
     private ServiceService serviceService;
-    @GetMapping("{code}")
+    @GetMapping("/{code}")
     public ResponseEntity<?> findByCode(@PathVariable String code){
         return ResponseEntity.ok(serviceService.findByCode(code));
     }
@@ -21,15 +21,15 @@ public class ServiceController {
     public ResponseEntity<?> findAll(){
         return ResponseEntity.ok(serviceService.findAll());
     }
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<?> create( @Valid @RequestBody ServiceRequest request){
         return ResponseEntity.ok(serviceService.create(request));
     }
-    @PutMapping("{code}")
+    @PutMapping("/{code}")
     public ResponseEntity<?> update(@Valid @PathVariable String code,@RequestBody ServiceRequest request){
         return ResponseEntity.ok(serviceService.update(code,request));
     }
-    @DeleteMapping("{code}")
+    @DeleteMapping("/{code}")
     public ResponseEntity<?> delete(@PathVariable String code){
         serviceService.delete(code);
         return ResponseEntity.noContent().build();

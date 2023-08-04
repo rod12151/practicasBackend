@@ -10,23 +10,23 @@ import practicas.gestion_personal.infraestructure.abstract_services.ContractServ
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("contract")
+@RequestMapping("/contract")
 @AllArgsConstructor
 public class ContractController {
     private ContractService contractService;
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody ContractRequest request){
         return ResponseEntity.ok(contractService.createContract(request));
     }
-    @GetMapping("filter/{dni}")
+    @GetMapping("/filter/{dni}")
     public  ResponseEntity<?> findByDniUser(@PathVariable String dni){
         return ResponseEntity.ok(contractService.findByUserDni(dni));
     }
-    @GetMapping("filter/regime")
+    @GetMapping("/filter/regime")
     public  ResponseEntity<?> findByCodeLaborRegime(@RequestParam String code){
         return ResponseEntity.ok(contractService.findByLaborRegimeCode(code));
     }
-    @GetMapping("filter/condition")
+    @GetMapping("/filter/condition")
     public  ResponseEntity<?> findByCodeWorkCondition(@RequestParam String code){
         return ResponseEntity.ok(contractService.findByWorkConditionCode(code));
     }
@@ -42,11 +42,11 @@ public class ContractController {
     public ResponseEntity<?> filterByStartDateAndFinishDate(@RequestParam LocalDate startDate,@RequestParam LocalDate finishDate){
         return ResponseEntity.ok(contractService.findByStartDateAndFinishDate(startDate, finishDate));
     }
-    @PutMapping("update")
+    @PutMapping("/update")
     public ResponseEntity<?> update(@Valid @RequestParam Long id ,@RequestBody ContractRequest request){
         return ResponseEntity.ok(contractService.updateContract(id,request));
     }
-    @DeleteMapping("delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestParam Long id){
         contractService.deleteContract(id);
         return ResponseEntity.noContent().build();

@@ -10,10 +10,10 @@ import practicas.gestion_personal.infraestructure.abstract_services.WorkConditio
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("workCondition")
+@RequestMapping("/workCondition")
 public class WorkConditionController {
     private WorkConditionService workConditionService;
-    @GetMapping("{code}")
+    @GetMapping("/{code}")
     public ResponseEntity<?> findByCode(@PathVariable String code){
         return ResponseEntity.ok(workConditionService.findByCode(code));
     }
@@ -21,15 +21,15 @@ public class WorkConditionController {
     public ResponseEntity<?> findAll(){
     return ResponseEntity.ok(workConditionService.findAll());
     }
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<?> create(@Valid @RequestBody SimpleRequest request){
     return ResponseEntity.ok(workConditionService.create(request));
     }
-    @PutMapping("update/{code}")
+    @PutMapping("/update/{code}")
     public ResponseEntity<?> update(@Valid @PathVariable String code, @RequestBody SimpleRequest request){
     return ResponseEntity.ok(workConditionService.update(code, request));
     }
-    @DeleteMapping({"delete/{code}"})
+    @DeleteMapping({"/delete/{code}"})
     public ResponseEntity<?> delete(@PathVariable String code){
         workConditionService.delete(code);
     return ResponseEntity.noContent().build();

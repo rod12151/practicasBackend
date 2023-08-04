@@ -18,8 +18,8 @@ public class UserRequest {
     private String name;
     @NotBlank(message = "el Apellido es obligatorio")
     private String lastName;
-    @Size(min = 6,message = "La contraseña debe tener mas de 6 caracteres")
-    private String password;
+    /*@Size(min = 6,message = "La contraseña debe tener mas de 6 caracteres")
+    private String password;*/
     @NotBlank(message = "se debe ingresar una profesion")
     private String profession;
     @Past()

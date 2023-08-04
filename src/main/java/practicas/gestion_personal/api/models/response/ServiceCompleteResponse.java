@@ -9,9 +9,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ServiceResponse implements Serializable {
+public class ServiceCompleteResponse implements Serializable {
     private Long id;
     private String code;
     private String name;
+    private String description;
 
 }

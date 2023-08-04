@@ -1,5 +1,6 @@
 package practicas.gestion_personal.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,8 +28,10 @@ public class ServiceEntity {
 
     /*relations with entity AssignmentUserService*/
     @OneToMany(mappedBy = "service"    )
+    @JsonIgnore
     private Set<AssignmentUserServiceEntity> assignment=new HashSet<>();
     /*relations with entity HeadService*/
     @OneToMany(mappedBy = "service"    )
+    @JsonIgnore
     private Set<HeadServiceEntity> boss =new HashSet<>();
 }

@@ -17,6 +17,7 @@ public class ContractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idContract;
+    private boolean status;
     @Column(name = "puesto",length = 20)
     private String position;
     @Column(name = "inicioContrat")

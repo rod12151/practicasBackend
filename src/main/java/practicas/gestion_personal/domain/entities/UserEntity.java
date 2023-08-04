@@ -56,7 +56,7 @@ public class UserEntity implements Serializable {
     private Set<ContractEntity> contracts;
 
     /*relation with roles*/
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "usersRoles",
             joinColumns =@JoinColumn(name="userId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"),

@@ -12,4 +12,7 @@ public interface UserService {
     UserResponse updateUser(String dni, UserRequest request);
     UserResponse createUser(UserRequest request);
     void deleteUser(String dni);
+    void deleteRoleUser(String dni,String role);
+
+    boolean haveRole(String dni,String role);
 }

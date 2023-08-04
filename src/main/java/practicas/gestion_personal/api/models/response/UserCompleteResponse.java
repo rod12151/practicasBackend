@@ -4,14 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserResponse {
+public class UserCompleteResponse {
     private Long idUser;
     private String dni;
     private String username;
-    private String fullName;
+    private String name;
+    private String lastName;
     private String profession;
-
+    private LocalDate birthDate;
 }

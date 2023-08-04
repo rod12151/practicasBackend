@@ -16,11 +16,7 @@ import practicas.gestion_personal.mapper.UserMapping;
 import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -84,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 .username(request.getDni()+"@hospital.huanta.pe")
                 .profession(request.getProfession())
                 .birthDate(request.getBirthDate())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getDni()))
                 .roles(roles)
                 .build();
         userRepository.save(userCreate);
@@ -96,6 +92,24 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String dni) {
         UserEntity userDb = userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
         userRepository.delete(userDb);
+
+    }
+    @Override
+    public void deleteRoleUser(String dni,String role){
+        UserEntity userDb = userRepository.findByDni(dni).orElseThrow(()-> new IdNotFoundException("User"));
+        List< RoleEntity> roles= userDb.getRoles();
+        roles.removeIf(objet -> Objects.equals(objet.getName(), role));
+        userDb.setRoles(roles);
+        userRepository.save(userDb);
+
+    }
+
+    @Override
+    public boolean haveRole(String dni, String role) {
+        UserEntity userDb = userRepository.findByDni(dni).orElseThrow(()-> new IdNotFoundException("User"));
+        List< RoleEntity> roles= userDb.getRoles();
+        return roles.stream()
+                .anyMatch( object->role.equals(object.getName()));
 
     }
 }
