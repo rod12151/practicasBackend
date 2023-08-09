@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
-import practicas.gestion_personal.api.models.response.SimpleResponse;
+import practicas.gestion_personal.api.models.response.LaborRegimeResponse;
+import practicas.gestion_personal.api.models.response.WorkConditionResponse;
 import practicas.gestion_personal.domain.entities.WorkConditionEntity;
 import practicas.gestion_personal.domain.repositories.WorkConditionRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.WorkConditionService;
@@ -20,41 +21,41 @@ public class WorkConditionImpl implements WorkConditionService {
     private WorkConditionRepository workConditionRepository;
     private ModelMapper modelMapper;
     @Override
-    public SimpleResponse findByCode(String code) {
+    public WorkConditionResponse findByCode(String code) {
         WorkConditionEntity workCondition =workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
 
-        return modelMapper.map(workCondition,SimpleResponse.class);
+        return modelMapper.map(workCondition, WorkConditionResponse.class);
     }
 
     @Override
-    public Set<SimpleResponse> findAll() {
+    public Set<WorkConditionResponse> findAll() {
         List<WorkConditionEntity> entities=workConditionRepository.findAll();
-        Set<SimpleResponse> response =new HashSet<>();
+        Set<WorkConditionResponse> response =new HashSet<>();
         for (WorkConditionEntity i:entities){
-            response.add(modelMapper.map(i,SimpleResponse.class));
+            response.add(modelMapper.map(i, WorkConditionResponse.class));
         }
         return response;
     }
 
     @Override
-    public SimpleResponse create(SimpleRequest request) {
+    public WorkConditionResponse create(SimpleRequest request) {
         WorkConditionEntity workCondition = WorkConditionEntity.builder()
                 .name(request.getName())
                 .code(request.getCode())
                 .description(request.getDescription())
                 .build();
         workConditionRepository.save(workCondition);
-        return modelMapper.map(workCondition,SimpleResponse.class);
+        return modelMapper.map(workCondition, WorkConditionResponse.class);
     }
 
     @Override
-    public SimpleResponse update(String code, SimpleRequest request) {
+    public WorkConditionResponse update(String code, SimpleRequest request) {
         WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
         workConditionUpdate.setCode(request.getCode());
         workConditionUpdate.setName(request.getName());
         workConditionUpdate.setDescription(request.getDescription());
         workConditionRepository.save(workConditionUpdate);
-        return modelMapper.map(workConditionUpdate,SimpleResponse.class);
+        return modelMapper.map(workConditionUpdate, WorkConditionResponse.class);
     }
 
     @Override

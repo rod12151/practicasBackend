@@ -13,7 +13,7 @@ import practicas.gestion_personal.infraestructure.abstract_services.LaborRegimeS
 public class LaborRegimeController {
     private LaborRegimeService laborRegimeService;
     @GetMapping("/{code}")
-    public ResponseEntity<?> findByCode(@PathVariable String code){
+    public ResponseEntity<?> findByCode(@Valid @PathVariable String code){
         return ResponseEntity.ok(laborRegimeService.findByCode(code));
     }
     @GetMapping

@@ -11,13 +11,14 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 public class ContractResponse implements Serializable {
+
     private Long idContract;
-    private String dni;
-    private String fullName;
-    private String nameLaborRegime;
-    private String nameWorkCondition;
     private String position;
     private String startDate;
     private String finishDate;
+    private UserResponse user;
+    private WorkConditionResponse workCondition;
+    private LaborRegimeResponse laborRegime;
+
 
 }

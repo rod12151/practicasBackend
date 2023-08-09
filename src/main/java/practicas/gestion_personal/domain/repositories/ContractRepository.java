@@ -2,9 +2,11 @@ package practicas.gestion_personal.domain.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import practicas.gestion_personal.domain.entities.ContractEntity;
+import practicas.gestion_personal.domain.entities.UserEntity;
 
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 
@@ -16,5 +18,7 @@ public interface ContractRepository extends JpaRepository<ContractEntity,Long> {
     Set<ContractEntity> findAllByStartDateIsAfter(LocalDate startDate);
     Set<ContractEntity> findAllByFinishDateIsBefore(LocalDate startDate);
     Set<ContractEntity> findAllByStartDateIsAfterAndFinishDateIsBeforeOrderByStartDate(LocalDate startDate, LocalDate finishDate);
+
+    List<ContractEntity> findByUser_DniAndStatusOrderByIdContractDesc(String user_dni, boolean status);
 
 }

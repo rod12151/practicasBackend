@@ -11,10 +11,7 @@ public class ContractMapping {
 
         ModelMapper modelMapper=new ModelMapper();
         ContractResponse response = modelMapper.map(entity,ContractResponse.class);
-        response.setDni(entity.getUser().getDni());
-        response.setFullName(entity.getUser().getName()+" "+entity.getUser().getLastName());
-        response.setNameLaborRegime(entity.getLaborRegime().getName());
-        response.setNameWorkCondition(entity.getWorkCondition().getName());
+        response.getUser().setFullName(entity.getUser().getName()+" "+entity.getUser().getLastName());
 
         return response;
 

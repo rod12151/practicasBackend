@@ -1,8 +1,6 @@
 package practicas.gestion_personal.api.models.request;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +24,8 @@ public class ContractRequest implements Serializable {
     private String codeWorkCondition;
     @NotBlank(message = "el puesto es obligatorio")
     private String position;
-
+    @PositiveOrZero(message = "El salario no puede ser negativo")
+    private Long salary;
     private LocalDate startDate;
 
     private LocalDate finishDate;

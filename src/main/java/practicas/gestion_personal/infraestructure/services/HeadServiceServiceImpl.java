@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.HeadServiceCreateRequest;
 import practicas.gestion_personal.api.models.response.HeadServiceResponse;
-import practicas.gestion_personal.api.models.response.UserResponse;
 import practicas.gestion_personal.domain.entities.HeadServiceEntity;
 import practicas.gestion_personal.domain.entities.RoleEntity;
 import practicas.gestion_personal.domain.entities.ServiceEntity;
@@ -17,7 +16,7 @@ import practicas.gestion_personal.infraestructure.abstract_services.HeadServiceS
 import practicas.gestion_personal.infraestructure.abstract_services.UserService;
 import practicas.gestion_personal.mapper.HeadServiceMapping;
 import practicas.gestion_personal.utils.IdNotFoundException;
-import practicas.gestion_personal.utils.UserHaveRoleException;
+import practicas.gestion_personal.utils.UserDuplicate;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -41,7 +40,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
         List<HeadServiceEntity> listBoss=headServiceRepository.findByServiceAndStatusOrderByFinishDateDesc(service,true);
         boolean haveRole = userService.haveRole(request.getDniUser(), "ROLE_JEFE");
         if(haveRole){
-            throw new UserHaveRoleException(request.getDniUser());
+            throw new UserDuplicate(request.getDniUser(),"ya es Jefe en otro servicio");
         }
         if (listBoss.size()==1){
             HeadServiceEntity jefeanterior = listBoss.get(0);
@@ -87,7 +86,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
     public String deleteHeadService(String dniUser, String codeService) {
         UserEntity user = userRepository.findByDni(dniUser).orElseThrow(()-> new IdNotFoundException("user"));
         ServiceEntity service = serviceRepository.findByCode(codeService).orElseThrow(()->new IdNotFoundException("service"));
-        Optional<HeadServiceEntity> headService= headServiceRepository.findByServiceAndStatusAndUser(service,true,user);
+        Optional<HeadServiceEntity> headService= headServiceRepository.findByService_CodeAndStatusAndUser_Dni(dniUser,true,codeService);
         if (headService.isPresent()){
             headService.orElseThrow().setStatus(false);
             headService.orElseThrow().setFinishDate(LocalDate.now());

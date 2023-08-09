@@ -5,6 +5,7 @@ import practicas.gestion_personal.api.models.response.ContractResponse;
 import practicas.gestion_personal.domain.entities.ContractEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public interface ContractService {
@@ -18,6 +19,7 @@ public interface ContractService {
     Set<ContractResponse> findByStartDateAndFinishDate(LocalDate startDate, LocalDate finishDate);
     ContractResponse createContract(ContractRequest request);
     ContractResponse updateContract(Long id,ContractRequest request);
-    void deleteContract(Long id);
+    String terminateContract(Long id);
+    List<ContractResponse> listContractUser(String dni,boolean status);
 
 }

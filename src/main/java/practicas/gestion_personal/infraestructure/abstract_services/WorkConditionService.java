@@ -1,15 +1,16 @@
 package practicas.gestion_personal.infraestructure.abstract_services;
 
 import practicas.gestion_personal.api.models.request.SimpleRequest;
-import practicas.gestion_personal.api.models.response.SimpleResponse;
+import practicas.gestion_personal.api.models.response.LaborRegimeResponse;
+import practicas.gestion_personal.api.models.response.WorkConditionResponse;
 
 import java.util.Set;
 
 public interface WorkConditionService {
-    SimpleResponse findByCode(String code);
-    Set<SimpleResponse> findAll();
-    SimpleResponse create(SimpleRequest request);
-    SimpleResponse update(String code, SimpleRequest request);
+    WorkConditionResponse findByCode(String code);
+    Set<WorkConditionResponse> findAll();
+    WorkConditionResponse create(SimpleRequest request);
+    WorkConditionResponse update(String code, SimpleRequest request);
     void delete(String code);
 
 

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
-import practicas.gestion_personal.api.models.response.SimpleResponse;
+import practicas.gestion_personal.api.models.response.LaborRegimeResponse;
 import practicas.gestion_personal.domain.entities.LaborRegimeEntity;
 import practicas.gestion_personal.domain.repositories.LaborRegimeRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.LaborRegimeService;
@@ -20,41 +20,41 @@ public class LaborRegimeImpl implements LaborRegimeService {
     private LaborRegimeRepository laborRegimeRepository;
     private ModelMapper modelMapper;
     @Override
-    public SimpleResponse findByCode(String code) {
+    public LaborRegimeResponse findByCode(String code) {
         LaborRegimeEntity laborRegime =laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
 
-        return modelMapper.map(laborRegime,SimpleResponse.class);
+        return modelMapper.map(laborRegime, LaborRegimeResponse.class);
     }
 
     @Override
-    public Set<SimpleResponse> findAll() {
+    public Set<LaborRegimeResponse> findAll() {
         List<LaborRegimeEntity> entities=laborRegimeRepository.findAll();
-        Set<SimpleResponse> response =new HashSet<>();
+        Set<LaborRegimeResponse> response =new HashSet<>();
         for (LaborRegimeEntity i:entities){
-            response.add(modelMapper.map(i,SimpleResponse.class));
+            response.add(modelMapper.map(i, LaborRegimeResponse.class));
         }
         return response;
     }
 
     @Override
-    public SimpleResponse create(SimpleRequest request) {
+    public LaborRegimeResponse create(SimpleRequest request) {
         LaborRegimeEntity laborRegime = LaborRegimeEntity.builder()
                 .name(request.getName())
                 .code(request.getCode())
                 .description(request.getDescription())
                 .build();
         laborRegimeRepository.save(laborRegime);
-        return modelMapper.map(laborRegime,SimpleResponse.class);
+        return modelMapper.map(laborRegime, LaborRegimeResponse.class);
     }
 
     @Override
-    public SimpleResponse update(String code, SimpleRequest request) {
+    public LaborRegimeResponse update(String code, SimpleRequest request) {
         LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
         laborRegimeUpdate.setCode(request.getCode());
         laborRegimeUpdate.setName(request.getName());
         laborRegimeUpdate.setDescription(request.getDescription());
         laborRegimeRepository.save(laborRegimeUpdate);
-        return modelMapper.map(laborRegimeUpdate,SimpleResponse.class);
+        return modelMapper.map(laborRegimeUpdate, LaborRegimeResponse.class);
     }
 
     @Override

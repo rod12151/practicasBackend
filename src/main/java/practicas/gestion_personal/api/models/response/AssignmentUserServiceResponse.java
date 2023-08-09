@@ -1,4 +1,4 @@
-package practicas.gestion_personal.api.models.request;
+package practicas.gestion_personal.api.models.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,16 +6,17 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class AssignationRequest implements Serializable {
-    private String dniBoss;
-    private String codeService;
-    private String dniUser;
+public class AssignmentUserServiceResponse implements Serializable {
+    private Long idAssignment;
     private LocalDate startDate;
     private LocalDate finishDate;
+    private boolean status;
+    private UserResponse user;
+    private ServiceResponse service;
+
 
 }

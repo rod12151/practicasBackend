@@ -20,6 +20,8 @@ public class ContractEntity {
     private boolean status;
     @Column(name = "puesto",length = 20)
     private String position;
+    @Column(name = "salario",nullable = false)
+    private Long Salary;
     @Column(name = "inicioContrat")
     private LocalDate startDate;
     @Column(name = "finContrat")

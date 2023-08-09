@@ -2,24 +2,28 @@ package practicas.gestion_personal.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name = "usuarioServicio")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class AssignmentUserServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idAsignacion")
     private Long idAssignment;
-    @Column(name = "inicioContrato")
-    private Date startDate;
-    @Column(name = "finContrato")
-    private Date finishDate;
+    @Column(name = "inicioAsignacion")
+    private LocalDate startDate;
+    @Column(name = "finAsignacion")
+    private LocalDate finishDate;
+    private boolean status;
     /*relations with entity User*/
     @ManyToOne(
             fetch = FetchType.LAZY,

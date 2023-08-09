@@ -9,9 +9,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SimpleResponse implements Serializable {
+public class LaborRegimeResponse implements Serializable {
     private Long id;
     private String name;
     private String code;
-    private String description;
 }
