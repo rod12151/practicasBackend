@@ -2,7 +2,6 @@ package practicas.gestion_personal.api.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practicas.gestion_personal.api.models.request.ContractRequest;

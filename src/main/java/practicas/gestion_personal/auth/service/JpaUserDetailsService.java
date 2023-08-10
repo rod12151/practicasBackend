@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.domain.entities.UserEntity;
 import practicas.gestion_personal.domain.repositories.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

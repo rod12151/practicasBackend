@@ -25,7 +25,7 @@ public class ServiceController {
         return ResponseEntity.ok(serviceService.findAll());
     }
     @PostMapping("/create")
-    public ResponseEntity<?> create( @Valid @RequestBody ServiceRequest request){
+    public ResponseEntity<ServiceResponse> create( @Valid @RequestBody ServiceRequest request){
         return ResponseEntity.ok(serviceService.create(request));
     }
     @PutMapping("/{code}")

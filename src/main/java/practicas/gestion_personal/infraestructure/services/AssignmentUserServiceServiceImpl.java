@@ -80,6 +80,7 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
         } else if (!Objects.equals(boss.getService().getCode(), request.getCodeService())) {
             throw new UserDuplicate(request.getDniBoss(),"yno es jefe del servicio");
         }
+
         {
             AssignmentUserServiceEntity assignmentCreate= AssignmentUserServiceEntity.builder()
                     .startDate(request.getStartDate())
@@ -92,6 +93,7 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
             assignmentUserServiceRepository.save(assignmentCreate);
             return   assignmentUserServiceMapping.assignmentUserServiceResponse(assignmentCreate);
         }
+
 
     }
 
