@@ -37,7 +37,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     @Transactional(readOnly = true)
     public Set<ContractResponse> findByUserDni(String dni) {
-        UserEntity user =userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
+//        UserEntity user =userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
         Set<ContractResponse> response=new HashSet<>();
         var contract= contractRepository.findAllByUser_Dni(dni);
         for (ContractEntity res:contract){
@@ -49,7 +49,7 @@ public class ContractServiceImpl implements ContractService {
     }
     @Override
     public Set<ContractResponse> findByLaborRegimeCode(String code) {
-        LaborRegimeEntity laborRegime=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+//        LaborRegimeEntity laborRegime=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
         Set<ContractResponse> response=new HashSet<>();
         var contract= contractRepository.findByLaborRegime_Code(code);
         for (ContractEntity res:contract){
@@ -61,7 +61,7 @@ public class ContractServiceImpl implements ContractService {
     }
     @Override
     public Set<ContractResponse> findByWorkConditionCode(String code) {
-        WorkConditionEntity workCondition=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+//        WorkConditionEntity workCondition=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
         Set<ContractResponse> response=new HashSet<>();
         var contract= contractRepository.findByWorkCondition_Code(code);
         for (ContractEntity res:contract){
@@ -104,7 +104,7 @@ public class ContractServiceImpl implements ContractService {
                     .finishDate(request.getFinishDate())
                     .laborRegime(laborRegime)
                     .workCondition(workCondition)
-                    .Salary(request.getSalary())
+                    .salary(request.getSalary())
                     .status(true)
                     .build();
             contractRepository.save(contract);
@@ -146,7 +146,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<ContractResponse> listContractUser(String dni, boolean status) {
-        UserEntity user = userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
+//        UserEntity user = userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
         List<ContractEntity> contracts = contractRepository.findByUser_DniAndStatusOrderByIdContractDesc(dni,status);
         List<ContractResponse> response = new ArrayList<>();
         for(ContractEntity res:contracts){

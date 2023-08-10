@@ -13,6 +13,7 @@ import practicas.gestion_personal.utils.IdNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class LaborRegimeImpl implements LaborRegimeService {
     private ModelMapper modelMapper;
     @Override
     public LaborRegimeResponse findByCode(String code) {
-        LaborRegimeEntity laborRegime =laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+        LaborRegimeEntity laborRegime =laborRegimeRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
 
         return modelMapper.map(laborRegime, LaborRegimeResponse.class);
     }
@@ -49,7 +50,7 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public LaborRegimeResponse update(String code, SimpleRequest request) {
-        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
         laborRegimeUpdate.setCode(request.getCode());
         laborRegimeUpdate.setName(request.getName());
         laborRegimeUpdate.setDescription(request.getDescription());
@@ -59,8 +60,12 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public void delete(String code) {
-        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
         laborRegimeRepository.delete(laborRegime);
 
+    }
+
+    private Supplier<IdNotFoundException> getIdNotFoundExceptionSupplier() {
+        return () -> new IdNotFoundException("laborRegime");
     }
 }

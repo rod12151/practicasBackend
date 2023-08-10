@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface HeadServiceRepository extends JpaRepository<HeadServiceEntity,Long> {
     List<HeadServiceEntity> findByServiceAndStatusOrderByFinishDateDesc(ServiceEntity service, Boolean status);
     List<HeadServiceEntity> findAllByStatus(Boolean status);
-    Optional<HeadServiceEntity> findByService_CodeAndStatusAndUser_Dni(String service_code, Boolean status, String user_dni);
+    Optional<HeadServiceEntity> findByService_CodeAndStatusAndUser_Dni(String serviceCode, Boolean status, String userDni);
 
 }
