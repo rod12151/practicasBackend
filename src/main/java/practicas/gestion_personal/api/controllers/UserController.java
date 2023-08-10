@@ -4,13 +4,10 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import practicas.gestion_personal.api.models.request.HeadServiceCreateRequest;
 import practicas.gestion_personal.api.models.request.UserRequest;
 import practicas.gestion_personal.api.models.response.UserResponse;
-import practicas.gestion_personal.infraestructure.abstract_services.HeadServiceService;
 import practicas.gestion_personal.infraestructure.abstract_services.UserService;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
