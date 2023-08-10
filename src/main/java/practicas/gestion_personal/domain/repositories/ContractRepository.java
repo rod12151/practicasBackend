@@ -2,7 +2,6 @@ package practicas.gestion_personal.domain.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import practicas.gestion_personal.domain.entities.ContractEntity;
-import practicas.gestion_personal.domain.entities.UserEntity;
 
 
 import java.time.LocalDate;
@@ -11,14 +10,14 @@ import java.util.Set;
 
 
 public interface ContractRepository extends JpaRepository<ContractEntity,Long> {
-    Set<ContractEntity> findAllByUser_Dni(String user_dni);
+    Set<ContractEntity> findAllByUserDni(String userDni);
 
-    Set<ContractEntity> findByLaborRegime_Code(String laborRegime_code);
-    Set<ContractEntity> findByWorkCondition_Code(String workCondition_code);
+    Set<ContractEntity> findByLaborRegimeCode(String laborRegimeCode);
+    Set<ContractEntity> findByWorkConditionCode(String workConditionCode);
     Set<ContractEntity> findAllByStartDateIsAfter(LocalDate startDate);
     Set<ContractEntity> findAllByFinishDateIsBefore(LocalDate startDate);
     Set<ContractEntity> findAllByStartDateIsAfterAndFinishDateIsBeforeOrderByStartDate(LocalDate startDate, LocalDate finishDate);
 
-    List<ContractEntity> findByUser_DniAndStatusOrderByIdContractDesc(String user_dni, boolean status);
+    List<ContractEntity> findByUserDniAndStatusOrderByIdContractDesc(String userDni, boolean status);
 
 }

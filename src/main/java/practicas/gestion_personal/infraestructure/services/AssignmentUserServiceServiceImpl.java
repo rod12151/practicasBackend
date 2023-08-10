@@ -42,7 +42,7 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
 
     @Override
     public List<AssignmentUserServiceResponse> findAllByCodeServiceAndStatus(String code, boolean status) {
-        List<AssignmentUserServiceEntity> listAssignment = assignmentUserServiceRepository.findByService_CodeAndStatus(code,status);
+        List<AssignmentUserServiceEntity> listAssignment = assignmentUserServiceRepository.findByServiceCodeAndStatus(code,status);
 
         List<AssignmentUserServiceResponse> response = new ArrayList<>();
         for ( AssignmentUserServiceEntity entity: listAssignment){
@@ -55,7 +55,7 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
 
     @Override
     public List<AssignmentUserServiceResponse> findAllByUserAndStatus(String dniUser, boolean status) {
-        List<AssignmentUserServiceEntity> listAssignment = assignmentUserServiceRepository.findByUser_DniAndStatusOrderByFinishDateDesc(dniUser, status);
+        List<AssignmentUserServiceEntity> listAssignment = assignmentUserServiceRepository.findByUserDniAndStatusOrderByFinishDateDesc(dniUser, status);
 
         List<AssignmentUserServiceResponse> response = new ArrayList<>();
         for ( AssignmentUserServiceEntity entity: listAssignment){
@@ -70,9 +70,9 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
     public AssignmentUserServiceResponse createAssigment(AssignationRequest request) {
         UserEntity user = userRepository.findByDni(request.getDniUser()).orElseThrow(()-> new IdNotFoundException("User"));
         ServiceEntity service = serviceRepository.findByCode(request.getCodeService()).orElseThrow(()->new IdNotFoundException("Service"));
-        HeadServiceEntity boss= headServiceRepository.findByService_CodeAndStatusAndUser_Dni(request.getCodeService(),true,request.getDniBoss()).orElseThrow(()->new IdNotFoundException("HeadService"));
-        List<ContractEntity> contracts = contractRepository.findByUser_DniAndStatusOrderByIdContractDesc(request.getDniUser(), true);
-        List<AssignmentUserServiceEntity> assignment = assignmentUserServiceRepository.findByUser_DniAndService_CodeAndStatus(request.getDniUser(), request.getCodeService(), true);
+        HeadServiceEntity boss= headServiceRepository.findByServiceCodeAndStatusAndUserDni(request.getCodeService(),true,request.getDniBoss()).orElseThrow(()->new IdNotFoundException("HeadService"));
+        List<ContractEntity> contracts = contractRepository.findByUserDniAndStatusOrderByIdContractDesc(request.getDniUser(), true);
+        List<AssignmentUserServiceEntity> assignment = assignmentUserServiceRepository.findByUserDniAndServiceCodeAndStatus(request.getDniUser(), request.getCodeService(), true);
         if(contracts.isEmpty()){
             throw new UserDuplicate(request.getDniUser(),"no tiene un contrato vigente");
         } else if (!assignment.isEmpty())  {
@@ -88,17 +88,17 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
                     .service(service)
                     .status(true)
                     .build();
-            assignmentUserServiceRepository.save(assignmentCreate);
 
-          return   assignmentUserServiceMapping.assignmentUserServiceResponse(assignmentCreate);
+            assignmentUserServiceRepository.save(assignmentCreate);
+            return   assignmentUserServiceMapping.assignmentUserServiceResponse(assignmentCreate);
         }
 
     }
 
     @Override
     public boolean terminateAssignation(String codeService,String dniBoss, String dniUser) {
-        List<AssignmentUserServiceEntity> assignmentUserService = assignmentUserServiceRepository.findByUser_DniAndService_CodeAndStatus(dniUser,codeService,true);
-        Optional<HeadServiceEntity> boss = headServiceRepository.findByService_CodeAndStatusAndUser_Dni(codeService,true,dniBoss);
+        List<AssignmentUserServiceEntity> assignmentUserService = assignmentUserServiceRepository.findByUserDniAndServiceCodeAndStatus(dniUser,codeService,true);
+        Optional<HeadServiceEntity> boss = headServiceRepository.findByServiceCodeAndStatusAndUserDni(codeService,true,dniBoss);
         if (!assignmentUserService.isEmpty()&& boss.isPresent()){
             AssignmentUserServiceEntity update = assignmentUserService.get(0);
             update.setFinishDate(LocalDate.now());

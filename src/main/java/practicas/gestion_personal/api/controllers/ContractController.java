@@ -2,8 +2,7 @@ package practicas.gestion_personal.api.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practicas.gestion_personal.api.models.request.ContractRequest;
@@ -24,7 +23,7 @@ public class ContractController {
         return ResponseEntity.ok(contractService.createContract(request));
     }
     @GetMapping("/filter/{dni}")
-    public  ResponseEntity<?> findByDniUser(@PathVariable String dni){
+    public  ResponseEntity<Set<ContractResponse>> findByDniUser(@PathVariable String dni){
         return ResponseEntity.ok(contractService.findByUserDni(dni));
     }
     @GetMapping("/filter/regime")
@@ -52,7 +51,7 @@ public class ContractController {
         return ResponseEntity.ok(contractService.updateContract(id,request));
     }
     @PutMapping("/terminate/{id}")
-    public ResponseEntity<?> terminateContract(@PathVariable Long id){
+    public ResponseEntity<String> terminateContract(@PathVariable Long id){
         String res= contractService.terminateContract(id);
         return ResponseEntity.ok(res);
     }

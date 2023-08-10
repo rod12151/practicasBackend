@@ -6,10 +6,10 @@ import practicas.gestion_personal.domain.entities.AssignmentUserServiceEntity;
 import java.util.List;
 
 public interface AssignmentUserServiceRepository extends JpaRepository<AssignmentUserServiceEntity,Long> {
-    List<AssignmentUserServiceEntity> findByService_CodeAndStatus(String service_code, boolean status);
+    List<AssignmentUserServiceEntity> findByServiceCodeAndStatus(String service_code, boolean status);
     List<AssignmentUserServiceEntity> findByStatusOrderByService(boolean status);
-    List<AssignmentUserServiceEntity> findByUser_DniAndService_CodeAndStatus(String user_dni, String service_code, boolean status);
-    List<AssignmentUserServiceEntity> findByUser_DniAndStatusOrderByFinishDateDesc(String user_dni, boolean status);
+    List<AssignmentUserServiceEntity> findByUserDniAndServiceCodeAndStatus(String user_dni, String service_code, boolean status);
+    List<AssignmentUserServiceEntity> findByUserDniAndStatusOrderByFinishDateDesc(String user_dni, boolean status);
 
 
 }

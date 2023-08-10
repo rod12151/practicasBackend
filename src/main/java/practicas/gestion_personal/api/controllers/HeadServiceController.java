@@ -26,7 +26,7 @@ public class HeadServiceController {
     }
 
     @PutMapping("delete/{code}/{dni}")
-    public ResponseEntity<?> deleteHeadService(@PathVariable String code,@PathVariable String dni){
+    public ResponseEntity<String> deleteHeadService(@PathVariable String code,@PathVariable String dni){
         return ResponseEntity.ok(headServiceService.deleteHeadService(dni,code));
 
     }

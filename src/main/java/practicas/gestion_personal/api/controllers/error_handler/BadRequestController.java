@@ -38,7 +38,7 @@ public class BadRequestController {
 
     }
     @ExceptionHandler(IdDuplicate.class)
-    public ErrorResponse IdDuplicate(IdDuplicate exception){
+    public ErrorResponse idDuplicate(IdDuplicate exception){
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST.name())
@@ -47,7 +47,7 @@ public class BadRequestController {
 
     }
     @ExceptionHandler(UserDuplicate.class)
-    public ErrorResponse UserHaveRole(UserDuplicate exception){
+    public ErrorResponse userHaveRole(UserDuplicate exception){
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST.name())

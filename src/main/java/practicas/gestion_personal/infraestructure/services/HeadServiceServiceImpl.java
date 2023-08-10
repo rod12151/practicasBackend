@@ -30,15 +30,16 @@ public class HeadServiceServiceImpl implements HeadServiceService {
     private HeadServiceRepository headServiceRepository;
     private RoleRepository roleRepository;
     private HeadServiceMapping headServiceMapping;
+    private static final String ROLE_JEFE = "ROLE_JEFE";
 
     @Override
     public HeadServiceResponse create(HeadServiceCreateRequest request) {
         UserEntity user = userRepository.findByDni(request.getDniUser()).orElseThrow(()-> new IdNotFoundException("User"));
         ServiceEntity service = serviceRepository.findByCode(request.getCodeService()).orElseThrow(()->new IdNotFoundException("Service"));
-        RoleEntity rol = roleRepository.findByName("ROLE_JEFE").orElseThrow();
+        RoleEntity rol = roleRepository.findByName(ROLE_JEFE).orElseThrow();
 
         List<HeadServiceEntity> listBoss=headServiceRepository.findByServiceAndStatusOrderByFinishDateDesc(service,true);
-        boolean haveRole = userService.haveRole(request.getDniUser(), "ROLE_JEFE");
+        boolean haveRole = userService.haveRole(request.getDniUser(), ROLE_JEFE);
         if(haveRole){
             throw new UserDuplicate(request.getDniUser(),"ya es Jefe en otro servicio");
         }
@@ -48,7 +49,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
             jefeanterior.setFinishDate(LocalDate.now());
             String userAnterior=jefeanterior.getUser().getDni();
 
-            userService.deleteRoleUser(userAnterior,"ROLE_JEFE");
+            userService.deleteRoleUser(userAnterior,ROLE_JEFE);
 
         }
 
@@ -63,7 +64,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
                 .startDate(request.getStartDate())
                 .finishDate(request.getFinishDate()).build();
         headServiceRepository.save(bossCreate);
-        return headServiceMapping.HeadServiceEntityToResponse(bossCreate);
+        return headServiceMapping.headServiceEntityToResponse(bossCreate);
 
 
 
@@ -76,7 +77,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
         List<HeadServiceEntity> list= headServiceRepository.findAllByStatus(status);
         Set<HeadServiceResponse> response= new HashSet<>();
         for(HeadServiceEntity res:list){
-            HeadServiceResponse aux=headServiceMapping.HeadServiceEntityToResponse(res);
+            HeadServiceResponse aux=headServiceMapping.headServiceEntityToResponse(res);
             response.add(aux);
         }
         return response;
@@ -86,12 +87,12 @@ public class HeadServiceServiceImpl implements HeadServiceService {
     public String deleteHeadService(String dniUser, String codeService) {
         UserEntity user = userRepository.findByDni(dniUser).orElseThrow(()-> new IdNotFoundException("user"));
         ServiceEntity service = serviceRepository.findByCode(codeService).orElseThrow(()->new IdNotFoundException("service"));
-        Optional<HeadServiceEntity> headService= headServiceRepository.findByService_CodeAndStatusAndUser_Dni(dniUser,true,codeService);
+        Optional<HeadServiceEntity> headService= headServiceRepository.findByServiceCodeAndStatusAndUserDni(dniUser,true,codeService);
         if (headService.isPresent()){
             headService.orElseThrow().setStatus(false);
             headService.orElseThrow().setFinishDate(LocalDate.now());
             String userAnterior=headService.get().getUser().getDni();
-            userService.deleteRoleUser(userAnterior,"ROLE_JEFE");
+            userService.deleteRoleUser(userAnterior,ROLE_JEFE);
 
         }else{
             return "El usuario no es jefe del servicio";
@@ -106,7 +107,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
         List<HeadServiceEntity> bossList = headServiceRepository.findByServiceAndStatusOrderByFinishDateDesc(service,status);
         List<HeadServiceResponse> response=new ArrayList<>();
         for(HeadServiceEntity res:bossList){
-            HeadServiceResponse aux=headServiceMapping.HeadServiceEntityToResponse(res);
+            HeadServiceResponse aux=headServiceMapping.headServiceEntityToResponse(res);
             response.add(aux);
         }
         return response;

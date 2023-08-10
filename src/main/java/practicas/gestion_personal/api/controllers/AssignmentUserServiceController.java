@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/assignment")
 @AllArgsConstructor
-public class assignmentUserServiceController {
+public class AssignmentUserServiceController {
     private AssignmentUserServiceService assignmentUserService;
     @PostMapping("/create")
     public ResponseEntity<AssignmentUserServiceResponse> createAssignment(@RequestBody AssignationRequest request){

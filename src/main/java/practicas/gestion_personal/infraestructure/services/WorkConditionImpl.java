@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
-import practicas.gestion_personal.api.models.response.LaborRegimeResponse;
 import practicas.gestion_personal.api.models.response.WorkConditionResponse;
 import practicas.gestion_personal.domain.entities.WorkConditionEntity;
 import practicas.gestion_personal.domain.repositories.WorkConditionRepository;

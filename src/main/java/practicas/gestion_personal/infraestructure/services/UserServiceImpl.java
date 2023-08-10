@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.api.models.request.UserRequest;
 import practicas.gestion_personal.api.models.response.UserResponse;
 import practicas.gestion_personal.domain.entities.RoleEntity;
