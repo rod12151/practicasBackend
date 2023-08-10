@@ -10,14 +10,18 @@ import java.util.Set;
 
 
 public interface ContractRepository extends JpaRepository<ContractEntity,Long> {
-    Set<ContractEntity> findAllByUser_Dni(String userDni);
 
-    Set<ContractEntity> findByLaborRegime_Code(String laborRegimeCode);
-    Set<ContractEntity> findByWorkCondition_Code(String workConditionCode);
+    Set<ContractEntity> findAllByUserDni(String userDni);
+
+    Set<ContractEntity> findByLaborRegimeCode(String laborRegimeCode);
+    Set<ContractEntity> findByWorkConditionCode(String workConditionCode);
+
     Set<ContractEntity> findAllByStartDateIsAfter(LocalDate startDate);
     Set<ContractEntity> findAllByFinishDateIsBefore(LocalDate startDate);
     Set<ContractEntity> findAllByStartDateIsAfterAndFinishDateIsBeforeOrderByStartDate(LocalDate startDate, LocalDate finishDate);
 
-    List<ContractEntity> findByUser_DniAndStatusOrderByIdContractDesc(String userDni, boolean status);
+
+    List<ContractEntity> findByUserDniAndStatusOrderByIdContractDesc(String userDni, boolean status);
+
 
 }

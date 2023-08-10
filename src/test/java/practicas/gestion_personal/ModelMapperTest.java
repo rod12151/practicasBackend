@@ -17,7 +17,9 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 class ModelMapperTest {
     @Test
-    void testUserMapping(){
+
+     void testUserMapping(){
+
         UserMapping userMapping = new UserMapping();
         UserEntity user =new UserEntity();
         user.setIdUser(1L);
@@ -33,7 +35,9 @@ class ModelMapperTest {
         assertEquals(user.getName()+" "+user.getLastName(),userResponse.getFullName());
     }
     @Test
-    void testServiceMapping(){
+
+     void testServiceMapping(){
+
         ServiceMapping serviceMapping=new ServiceMapping();
         ServiceEntity service = new ServiceEntity();
         service.setIdService(1L);
@@ -49,7 +53,9 @@ class ModelMapperTest {
     }
 
     @Test
-    void testHeadServiceMapping(){
+
+     void testHeadServiceMapping(){
+
         HeadServiceMapping headServiceMapping=new HeadServiceMapping();
         HeadServiceEntity headService = new HeadServiceEntity();
         ServiceEntity service = new ServiceEntity();

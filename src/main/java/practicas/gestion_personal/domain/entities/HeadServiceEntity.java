@@ -1,5 +1,6 @@
 package practicas.gestion_personal.domain.entities;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
