@@ -21,7 +21,7 @@ public class ContractEntity {
     @Column(name = "puesto",length = 20)
     private String position;
     @Column(name = "salario",nullable = false)
-    private Long Salary;
+    private Long salary;
     @Column(name = "inicioContrat")
     private LocalDate startDate;
     @Column(name = "finContrat")

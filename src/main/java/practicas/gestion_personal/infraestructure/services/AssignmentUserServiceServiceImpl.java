@@ -80,18 +80,18 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
         } else if (!Objects.equals(boss.getService().getCode(), request.getCodeService())) {
             throw new UserDuplicate(request.getDniBoss(),"yno es jefe del servicio");
         }
-        {
-            AssignmentUserServiceEntity assignmentCreate= AssignmentUserServiceEntity.builder()
-                    .startDate(request.getStartDate())
-                    .finishDate(request.getFinishDate())
-                    .user(user)
-                    .service(service)
-                    .status(true)
-                    .build();
-            assignmentUserServiceRepository.save(assignmentCreate);
 
-          return   assignmentUserServiceMapping.assignmentUserServiceResponse(assignmentCreate);
-        }
+        AssignmentUserServiceEntity assignmentCreate= AssignmentUserServiceEntity.builder()
+                .startDate(request.getStartDate())
+                .finishDate(request.getFinishDate())
+                .user(user)
+                .service(service)
+                .status(true)
+                .build();
+        assignmentUserServiceRepository.save(assignmentCreate);
+
+        return   assignmentUserServiceMapping.assignmentUserServiceResponse(assignmentCreate);
+
 
     }
 

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
-import practicas.gestion_personal.api.models.response.LaborRegimeResponse;
 import practicas.gestion_personal.api.models.response.WorkConditionResponse;
 import practicas.gestion_personal.domain.entities.WorkConditionEntity;
 import practicas.gestion_personal.domain.repositories.WorkConditionRepository;
@@ -14,6 +13,7 @@ import practicas.gestion_personal.utils.IdNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class WorkConditionImpl implements WorkConditionService {
     private ModelMapper modelMapper;
     @Override
     public WorkConditionResponse findByCode(String code) {
-        WorkConditionEntity workCondition =workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+        WorkConditionEntity workCondition =workConditionRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
 
         return modelMapper.map(workCondition, WorkConditionResponse.class);
     }
@@ -50,7 +50,7 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public WorkConditionResponse update(String code, SimpleRequest request) {
-        WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+        WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
         workConditionUpdate.setCode(request.getCode());
         workConditionUpdate.setName(request.getName());
         workConditionUpdate.setDescription(request.getDescription());
@@ -60,8 +60,12 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public void delete(String code) {
-        WorkConditionEntity workCondition = workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+        WorkConditionEntity workCondition = workConditionRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
         workConditionRepository.delete(workCondition);
 
+    }
+
+    private Supplier<IdNotFoundException> getIdNotFoundExceptionSupplier() {
+        return () -> new IdNotFoundException("workCondition");
     }
 }

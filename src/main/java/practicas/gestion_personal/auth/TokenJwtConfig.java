@@ -2,13 +2,15 @@ package practicas.gestion_personal.auth;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.NoArgsConstructor;
 
 import java.security.Key;
 
+@NoArgsConstructor
 public class TokenJwtConfig {
-    public final static Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    public final static String PREFIX_TOKEN= "Bearer ";
-    public final static String HEADER_AUTHORIZATION = "Authorization";
+    public static final  Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public static final String PREFIX_TOKEN= "Bearer ";
+    public static final String HEADER_AUTHORIZATION = "Authorization";
 
 
 }
