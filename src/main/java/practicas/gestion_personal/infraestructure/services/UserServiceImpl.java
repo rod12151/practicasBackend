@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userDb = userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
         userRepository.delete(userDb);
 
+
     }
     @Override
     public void deleteRoleUser(String dni,String role){
@@ -110,5 +111,16 @@ public class UserServiceImpl implements UserService {
         return roles.stream()
                 .anyMatch( object->role.equals(object.getName()));
 
+    }
+
+    @Override
+    public Set<UserResponse> findByNameContains(String query) {
+        var users=userRepository.findByNameContainsOrLastNameContaining(query,query);
+        Set<UserResponse> response= new HashSet<>();
+        for(UserEntity res:users){
+            UserResponse aux=userMapping.userEntityToResponse(res);
+            response.add(aux);
+        }
+        return response;
     }
 }

@@ -8,6 +8,7 @@ import practicas.gestion_personal.api.models.request.SimpleRequest;
 import practicas.gestion_personal.api.models.response.LaborRegimeResponse;
 import practicas.gestion_personal.infraestructure.abstract_services.LaborRegimeService;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -35,5 +36,10 @@ public class LaborRegimeController {
     public ResponseEntity<Void> delete(@PathVariable String code){
         laborRegimeService.delete(code);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping(path = "/share")
+    public ResponseEntity<List<LaborRegimeResponse>> findNameContains(@RequestParam String query){
+        return ResponseEntity.ok(laborRegimeService.findByName(query));
+
     }
 }

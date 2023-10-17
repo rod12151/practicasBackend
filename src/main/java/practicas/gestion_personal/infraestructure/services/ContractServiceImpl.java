@@ -91,7 +91,7 @@ public class ContractServiceImpl implements ContractService {
     }
     @Override
     public Set<ContractResponse> findByFinishDateBefore(LocalDate date) {
-        var contract= contractRepository.findAllByFinishDateIsBefore(date);
+        var contract= contractRepository.findAllByFinishDateIsBeforeAndStatusIsTrue(date);
         return getContractResponses(contract);
     }
 

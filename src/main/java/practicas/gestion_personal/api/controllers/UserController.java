@@ -29,6 +29,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
 
     }
+    @GetMapping(path = "/share")
+    public ResponseEntity<Set<UserResponse>> findNameContains(@RequestParam String query){
+        return ResponseEntity.ok(userService.findByNameContains(query));
+
+    }
     @PostMapping("/create")
     public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest request){
         return ResponseEntity.ok(userService.createUser(request));

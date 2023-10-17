@@ -15,4 +15,5 @@ public interface UserService {
     void deleteRoleUser(String dni,String role);
 
     boolean haveRole(String dni,String role);
+    Set<UserResponse> findByNameContains(String query);
 }

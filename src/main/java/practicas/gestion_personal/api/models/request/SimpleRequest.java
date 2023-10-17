@@ -13,10 +13,10 @@ import java.io.Serializable;
 @Data
 public class SimpleRequest implements Serializable {
     @NotBlank(message = "Se debe ingresar un nombre")
-    @Size(max = 20)
+    @Size(max = 20,message = "el tamaño del nombre no puede ser mayor a 20 digitos")
     private String name;
     @NotBlank(message = "Se debe ingresar el codigo")
-    @Size(max = 8)
+    @Size(min = 8,max = 8,message = "el Codigo debe tener 8 digitos")
     private String code;
     private String description;
 }

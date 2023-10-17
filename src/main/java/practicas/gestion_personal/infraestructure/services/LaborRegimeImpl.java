@@ -5,14 +5,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
 import practicas.gestion_personal.api.models.response.LaborRegimeResponse;
+import practicas.gestion_personal.api.models.response.WorkConditionResponse;
 import practicas.gestion_personal.domain.entities.LaborRegimeEntity;
+import practicas.gestion_personal.domain.entities.WorkConditionEntity;
 import practicas.gestion_personal.domain.repositories.LaborRegimeRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.LaborRegimeService;
+import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -38,6 +39,8 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public LaborRegimeResponse create(SimpleRequest request) {
+        Optional<LaborRegimeEntity> laborRe= laborRegimeRepository.findByCode(request.getCode());
+        if( laborRe.isEmpty()){
         LaborRegimeEntity laborRegime = LaborRegimeEntity.builder()
                 .name(request.getName())
                 .code(request.getCode())
@@ -45,6 +48,10 @@ public class LaborRegimeImpl implements LaborRegimeService {
                 .build();
         laborRegimeRepository.save(laborRegime);
         return modelMapper.map(laborRegime, LaborRegimeResponse.class);
+
+    }else {
+            throw new IdDuplicate("codigo "+request.getCode());
+        }
     }
 
     @Override
@@ -62,5 +69,16 @@ public class LaborRegimeImpl implements LaborRegimeService {
         LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
         laborRegimeRepository.delete(laborRegime);
 
+    }
+
+    @Override
+    public List<LaborRegimeResponse> findByName(String name) {
+        var data = laborRegimeRepository.findByNameContains(name);
+        List<LaborRegimeResponse> response= new ArrayList<>();
+        for(LaborRegimeEntity res:data){
+            LaborRegimeResponse aux=modelMapper.map(res,LaborRegimeResponse.class);
+            response.add(aux);
+        }
+        return response;
     }
 }

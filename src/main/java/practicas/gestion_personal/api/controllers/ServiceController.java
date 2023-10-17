@@ -1,5 +1,8 @@
 package practicas.gestion_personal.api.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +19,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class ServiceController {
     private ServiceService serviceService;
+    @Operation(summary = "optener un servico mediante el codigo de servicio")
+    //@Parameter(in = ParameterIn.HEADER,name = "Authorization",description = "Token de Autorizacion",required = true)
     @GetMapping("/{code}")
-    public ResponseEntity<ServiceResponse> findByCode(@PathVariable String code){
+    public ResponseEntity<ServiceResponse> findByCode(
+            @PathVariable String code){
         return ResponseEntity.ok(serviceService.findByCode(code));
     }
     @GetMapping()
