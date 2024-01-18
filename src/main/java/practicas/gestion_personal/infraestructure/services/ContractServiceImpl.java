@@ -108,8 +108,8 @@ public class ContractServiceImpl implements ContractService {
         LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(request.getCodeLaborRegime()).orElseThrow(() -> new IdNotFoundException("laborRegime"));
 
         List<ContractEntity> contracts = contractRepository.findByUserDniAndStatusOrderByIdContractDesc(request.getDniUser(), true);
-
-        if(contracts.isEmpty()) {
+        userEntity.setStatus(true);
+        if(contracts.isEmpty() && userEntity.isStatus()) {
             ContractEntity contract = ContractEntity.builder()
                     .user(userEntity)
                     .position(request.getPosition())
@@ -124,7 +124,7 @@ public class ContractServiceImpl implements ContractService {
             return contractMapping.entityToResponse(contract);
         }
         else {
-            throw new UserDuplicate(request.getDniUser(), "ya tiene un contrato vigente,");
+            throw new UserDuplicate(request.getDniUser(), "ya tiene un contrato vigente, o el usuario esta inactivo");
         }
     }
     @Override
@@ -150,6 +150,7 @@ public class ContractServiceImpl implements ContractService {
         if(contract.isStatus()){
         contract.setStatus(false);
         contract.setFinishDate(LocalDate.now());
+        contract.getUser().setStatus(false);
         contractRepository.save(contract);
         return " el contrato del Usuario con DNI: "+ contract.getUser().getDni()+ " se actualizó a un estado terminado";
     }

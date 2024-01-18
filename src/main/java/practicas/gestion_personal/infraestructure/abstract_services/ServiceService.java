@@ -1,6 +1,7 @@
 package practicas.gestion_personal.infraestructure.abstract_services;
 
 import practicas.gestion_personal.api.models.request.ServiceRequest;
+import practicas.gestion_personal.api.models.response.ServiceCompleteResponse;
 import practicas.gestion_personal.api.models.response.ServiceResponse;
 
 import java.util.Set;
@@ -12,4 +13,5 @@ public interface ServiceService {
     void delete(String code);
 
     ServiceResponse update(String code,ServiceRequest request);
+    Set<ServiceResponse> findAllByHeadStatus(Boolean query);
 }

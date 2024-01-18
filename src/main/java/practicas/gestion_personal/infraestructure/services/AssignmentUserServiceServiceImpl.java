@@ -7,6 +7,7 @@ import practicas.gestion_personal.api.models.response.AssignmentUserServiceRespo
 import practicas.gestion_personal.domain.entities.*;
 import practicas.gestion_personal.domain.repositories.*;
 import practicas.gestion_personal.infraestructure.abstract_services.AssignmentUserServiceService;
+import practicas.gestion_personal.infraestructure.abstract_services.UserService;
 import practicas.gestion_personal.mapper.AssignmentUserServiceMapping;
 import practicas.gestion_personal.utils.IdNotFoundException;
 import practicas.gestion_personal.utils.UserDuplicate;
@@ -25,7 +26,8 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
     private ServiceRepository serviceRepository;
     private ContractRepository contractRepository;
     private AssignmentUserServiceRepository assignmentUserServiceRepository;
-
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private UserService userService;
     private AssignmentUserServiceMapping assignmentUserServiceMapping;
 
     @Override
@@ -73,14 +75,12 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
         HeadServiceEntity boss= headServiceRepository.findByServiceCodeAndStatusAndUserDni(request.getCodeService(),true,request.getDniBoss()).orElseThrow(()->new IdNotFoundException("HeadService"));
         List<ContractEntity> contracts = contractRepository.findByUserDniAndStatusOrderByIdContractDesc(request.getDniUser(), true);
         List<AssignmentUserServiceEntity> assignment = assignmentUserServiceRepository.findByUserDniAndServiceCodeAndStatus(request.getDniUser(), request.getCodeService(), true);
+        boolean isAdmin = userService.haveRole(request.getDniBoss(), ROLE_ADMIN);
         if(contracts.isEmpty()){
             throw new UserDuplicate(request.getDniUser(),"no tiene un contrato vigente");
         } else if (!assignment.isEmpty())  {
             throw new UserDuplicate(request.getDniUser(),"ya está asignado a otro serevicio");
-        } else if (!Objects.equals(boss.getService().getCode(), request.getCodeService())) {
-            throw new UserDuplicate(request.getDniBoss(),"yno es jefe del servicio");
-        }
-        {
+        } else if (Objects.equals(boss.getService().getCode(), request.getCodeService())||isAdmin) {
             AssignmentUserServiceEntity assignmentCreate= AssignmentUserServiceEntity.builder()
                     .startDate(request.getStartDate())
                     .finishDate(request.getFinishDate())
@@ -91,6 +91,9 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
 
             assignmentUserServiceRepository.save(assignmentCreate);
             return   assignmentUserServiceMapping.assignmentUserServiceResponse(assignmentCreate);
+
+        }else{
+            throw new UserDuplicate(request.getDniBoss(),"no es jefe del servicio,tampoco es administrador");
         }
 
     }
@@ -99,7 +102,9 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
     public boolean terminateAssignation(String codeService,String dniBoss, String dniUser) {
         List<AssignmentUserServiceEntity> assignmentUserService = assignmentUserServiceRepository.findByUserDniAndServiceCodeAndStatus(dniUser,codeService,true);
         Optional<HeadServiceEntity> boss = headServiceRepository.findByServiceCodeAndStatusAndUserDni(codeService,true,dniBoss);
-        if (!assignmentUserService.isEmpty()&& boss.isPresent()){
+
+        boolean isAdmin = userService.haveRole(dniBoss, ROLE_ADMIN);
+        if (!assignmentUserService.isEmpty()&& (boss.isPresent()|| isAdmin)){
             AssignmentUserServiceEntity update = assignmentUserService.get(0);
             update.setFinishDate(LocalDate.now());
             update.setStatus(false);

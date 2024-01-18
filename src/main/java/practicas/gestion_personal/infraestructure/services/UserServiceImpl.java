@@ -6,14 +6,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.UserRequest;
 import practicas.gestion_personal.api.models.response.UserResponse;
+import practicas.gestion_personal.domain.entities.ContractEntity;
 import practicas.gestion_personal.domain.entities.RoleEntity;
 import practicas.gestion_personal.domain.entities.UserEntity;
+import practicas.gestion_personal.domain.repositories.ContractRepository;
 import practicas.gestion_personal.domain.repositories.RoleRepository;
 import practicas.gestion_personal.domain.repositories.UserRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.UserService;
 import practicas.gestion_personal.mapper.UserMapping;
 import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
+import practicas.gestion_personal.utils.UserDuplicate;
 
 import java.util.*;
 
@@ -23,7 +26,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-
+    private ContractRepository contractRepository;
     private UserMapping userMapping;
 
     private PasswordEncoder passwordEncoder;
@@ -35,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<UserResponse> findAll() {
-        var users=userRepository.findAll();
+        var users=userRepository.findAllByStatusIsTrue();
         Set<UserResponse> response= new HashSet<>();
         for(UserEntity res:users){
             UserResponse aux=userMapping.userEntityToResponse(res);
@@ -80,6 +83,7 @@ public class UserServiceImpl implements UserService {
                 .profession(request.getProfession())
                 .birthDate(request.getBirthDate())
                 .password(passwordEncoder.encode(request.getDni()))
+                .status(true)
                 .roles(roles)
                 .build();
         userRepository.save(userCreate);
@@ -88,11 +92,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String dni) {
+    public boolean changeStatus(String dni) {
+        System.out.println("llego");
+        List<ContractEntity> contract = contractRepository.findByUserDniAndStatusOrderByIdContractDesc(dni,true);
         UserEntity userDb = userRepository.findByDni(dni).orElseThrow(()->new IdNotFoundException("user"));
-        userRepository.delete(userDb);
+        if (contract.isEmpty()){
+            userDb.setStatus(false);
+            userRepository.save(userDb);
+        }
+        else{
+            throw new UserDuplicate(dni, "tiene un contrato vigente, imposible eliminar");
+        }
 
 
+        return false;
     }
     @Override
     public void deleteRoleUser(String dni,String role){

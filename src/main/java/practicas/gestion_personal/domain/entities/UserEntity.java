@@ -36,6 +36,8 @@ public class UserEntity implements Serializable {
     private String profession;
     @Column(name = "fechaNacimiento")
     private LocalDate birthDate;
+    @Column(name ="estado")
+    private boolean status=true;
 
     /*relation with AssignmentUserService*/
     @OneToMany(mappedBy = "user"
