@@ -13,7 +13,9 @@ import practicas.gestion_personal.infraestructure.abstract_services.LaborRegimeS
 import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
 
+
 import java.util.*;
+
 
 @Service
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public class LaborRegimeImpl implements LaborRegimeService {
     private ModelMapper modelMapper;
     @Override
     public LaborRegimeResponse findByCode(String code) {
-        LaborRegimeEntity laborRegime =laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+        LaborRegimeEntity laborRegime =laborRegimeRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
 
         return modelMapper.map(laborRegime, LaborRegimeResponse.class);
     }
@@ -56,7 +58,7 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public LaborRegimeResponse update(String code, SimpleRequest request) {
-        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
         laborRegimeUpdate.setCode(request.getCode());
         laborRegimeUpdate.setName(request.getName());
         laborRegimeUpdate.setDescription(request.getDescription());
@@ -66,10 +68,11 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public void delete(String code) {
-        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+        LaborRegimeEntity laborRegime = laborRegimeRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
         laborRegimeRepository.delete(laborRegime);
 
     }
+
 
     @Override
     public List<LaborRegimeResponse> findByName(String name) {
@@ -80,5 +83,5 @@ public class LaborRegimeImpl implements LaborRegimeService {
             response.add(aux);
         }
         return response;
-    }
+
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface AssignmentUserServiceRepository extends JpaRepository<AssignmentUserServiceEntity,Long> {
+
     List<AssignmentUserServiceEntity> findByServiceCodeAndStatus(String service_code, boolean status);
     List<AssignmentUserServiceEntity> findByStatusOrderByService(boolean status);
     List<AssignmentUserServiceEntity> findByUserDniAndStatus(String user_dni, boolean status);
@@ -33,5 +34,6 @@ public interface AssignmentUserServiceRepository extends JpaRepository<Assignmen
             " join servicio s on us.service.idService=s.idService" +
             " where us.status =true and c.status=true and s.name Like %:filter%")
     Set<AssignmentUserServiceEntity> filterForService(@Param("filter") String filter);
+
 
 }

@@ -9,7 +9,11 @@ import java.util.Optional;
 
 public interface HeadServiceRepository extends JpaRepository<HeadServiceEntity,Long> {
     List<HeadServiceEntity> findByServiceAndStatusOrderByFinishDateDesc(ServiceEntity service, Boolean status);
+
     List<HeadServiceEntity> findAllByStatusOrderByIdHeadService(Boolean status);
+
+
     Optional<HeadServiceEntity> findByServiceCodeAndStatusAndUserDni(String serviceCode, Boolean status, String userDni);
+
 
 }

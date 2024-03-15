@@ -36,6 +36,8 @@ public class HeadServiceServiceImpl implements HeadServiceService {
     public HeadServiceResponse create(HeadServiceCreateRequest request) {
         UserEntity user = userRepository.findByDni(request.getDniUser()).orElseThrow(()-> new IdNotFoundException("User"));
         ServiceEntity service = serviceRepository.findByCode(request.getCodeService()).orElseThrow(()->new IdNotFoundException("Service"));
+
+
         RoleEntity rol = roleRepository.findByName(ROLE_JEFE).orElseThrow();
 
         List<HeadServiceEntity> listBoss=headServiceRepository.findByServiceAndStatusOrderByFinishDateDesc(service,true);
@@ -48,6 +50,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
             jefeanterior.setStatus(false);
             jefeanterior.setFinishDate(LocalDate.now());
             String userAnterior=jefeanterior.getUser().getDni();
+
 
             userService.deleteRoleUser(userAnterior,ROLE_JEFE);
 
@@ -88,8 +91,10 @@ public class HeadServiceServiceImpl implements HeadServiceService {
 
     @Override
     public String deleteHeadService(String dniUser, String codeService) {
+
         UserEntity user = userRepository.findByDni(dniUser).orElseThrow(()-> new IdNotFoundException("user"));
         ServiceEntity service = serviceRepository.findByCode(codeService).orElseThrow(()->new IdNotFoundException("service"));
+
         if (user!=null && service!=null){
             Optional<HeadServiceEntity> headService= headServiceRepository.findByServiceCodeAndStatusAndUserDni(codeService,true,dniUser);
             if (headService.isPresent()){
@@ -103,7 +108,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
             }else{
                 return "El usuario no es jefe del servicio";
             }
-        }
+
 
 
         return "se eliminó al jefe del servicio";
