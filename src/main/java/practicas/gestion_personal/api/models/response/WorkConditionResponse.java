@@ -13,4 +13,5 @@ public class WorkConditionResponse implements Serializable {
     private Long id;
     private String name;
     private String code;
+    private String description;
 }

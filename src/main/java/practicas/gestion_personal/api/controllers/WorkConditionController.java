@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
-
 import practicas.gestion_personal.api.models.response.WorkConditionResponse;
 import practicas.gestion_personal.infraestructure.abstract_services.WorkConditionService;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -36,5 +36,10 @@ public class WorkConditionController {
     public ResponseEntity<Void> delete(@PathVariable String code){
         workConditionService.delete(code);
     return ResponseEntity.noContent().build();
+    }
+    @GetMapping(path = "/share")
+    public ResponseEntity<List<WorkConditionResponse>> findNameContains(@RequestParam String query){
+        return ResponseEntity.ok(workConditionService.findByName(query));
+
     }
 }

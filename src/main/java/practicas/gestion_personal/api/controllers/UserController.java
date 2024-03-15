@@ -26,14 +26,24 @@ public class UserController {
         return ResponseEntity.ok(userService.findAll());
 
     }
+    @GetMapping(path = "/share")
+    public ResponseEntity<Set<UserResponse>> findNameContains(@RequestParam String query){
+        return ResponseEntity.ok(userService.findByNameContains(query));
+
+    }
     @PostMapping("/create")
     public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest request){
         return ResponseEntity.ok(userService.createUser(request));
     }
-    @DeleteMapping("/{dni}")
-    public ResponseEntity<Void> delete(@PathVariable String dni){
-        userService.deleteUser(dni);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{dni}")
+    public boolean change(@PathVariable String dni){
+        userService.changeStatus(dni);
+        return true;
+    }
+    @GetMapping("/user/assign")
+    public ResponseEntity<Set<UserResponse>> findUserAssignment(@RequestParam String query){
+         return ResponseEntity.ok(userService.findUserNotAssignments(query));
+
     }
 
 }

@@ -47,6 +47,7 @@ public class ServiceServiceImpl implements ServiceService {
                 .code(request.getCode())
                 .name(request.getName())
                 .description(request.getDescription())
+                .headAssigment(false)
                 .build();
         serviceRepository.save(res);
         return modelMapper.map(res,ServiceResponse.class);
@@ -70,4 +71,27 @@ public class ServiceServiceImpl implements ServiceService {
         serviceRepository.save(serviceUpdate);
         return modelMapper.map(serviceUpdate,ServiceResponse.class);
     }
+
+    @Override
+    public Set<ServiceResponse> findAllByHeadStatus(Boolean query) {
+        Set<ServiceEntity> entity = serviceRepository.findByHeadAssigment(query);
+        Set<ServiceResponse> response =new HashSet<>();
+        for (ServiceEntity ser:entity){
+            response.add(modelMapper.map(ser,ServiceResponse.class));
+        }
+
+        return response;
+    }
+
+    @Override
+    public Set<ServiceResponse> findByNameContains(String name) {
+        Set<ServiceEntity> entity = serviceRepository.findByNameContains(name);
+        Set<ServiceResponse> response =new HashSet<>();
+        for (ServiceEntity ser:entity){
+            response.add(modelMapper.map(ser,ServiceResponse.class));
+        }
+
+        return response;
+    }
+
 }

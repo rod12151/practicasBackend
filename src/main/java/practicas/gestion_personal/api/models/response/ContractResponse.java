@@ -15,6 +15,8 @@ public class ContractResponse implements Serializable {
     private String position;
     private String startDate;
     private String finishDate;
+    private boolean status;
+    private Long salary;
     private UserResponse user;
     private WorkConditionResponse workCondition;
     private LaborRegimeResponse laborRegime;

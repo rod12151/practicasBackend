@@ -4,16 +4,20 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
+import practicas.gestion_personal.api.models.response.UserResponse;
 import practicas.gestion_personal.api.models.response.WorkConditionResponse;
+import practicas.gestion_personal.domain.entities.UserEntity;
 import practicas.gestion_personal.domain.entities.WorkConditionEntity;
 import practicas.gestion_personal.domain.repositories.WorkConditionRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.WorkConditionService;
+import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
+import practicas.gestion_personal.utils.UserDuplicate;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
+
+import java.lang.reflect.Type;
+import java.util.*;
+
 
 @Service
 @AllArgsConstructor
@@ -39,13 +43,18 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public WorkConditionResponse create(SimpleRequest request) {
-        WorkConditionEntity workCondition = WorkConditionEntity.builder()
-                .name(request.getName())
-                .code(request.getCode())
-                .description(request.getDescription())
-                .build();
-        workConditionRepository.save(workCondition);
-        return modelMapper.map(workCondition, WorkConditionResponse.class);
+        Optional<WorkConditionEntity> work =workConditionRepository.findByCode(request.getCode());
+        if (work.isEmpty()) {
+            WorkConditionEntity workCondition = WorkConditionEntity.builder()
+                    .name(request.getName())
+                    .code(request.getCode())
+                    .description(request.getDescription())
+                    .build();
+            workConditionRepository.save(workCondition);
+            return modelMapper.map(workCondition, WorkConditionResponse.class);
+        }else {
+            throw new IdDuplicate("codigo "+request.getCode());
+        }
     }
 
     @Override
@@ -65,7 +74,16 @@ public class WorkConditionImpl implements WorkConditionService {
 
     }
 
-    private Supplier<IdNotFoundException> getIdNotFoundExceptionSupplier() {
-        return () -> new IdNotFoundException("workCondition");
+
+    @Override
+    public List<WorkConditionResponse> findByName(String name) {
+        var data = workConditionRepository.findByNameContains(name);
+        List<WorkConditionResponse> response= new ArrayList<>();
+        for(WorkConditionEntity res:data){
+            WorkConditionResponse aux=modelMapper.map(res,WorkConditionResponse.class);
+            response.add(aux);
+        }
+        return response;
     }
+
 }

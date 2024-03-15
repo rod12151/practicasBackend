@@ -3,6 +3,7 @@ package practicas.gestion_personal.infraestructure.abstract_services;
 import practicas.gestion_personal.api.models.request.SimpleRequest;
 import practicas.gestion_personal.api.models.response.WorkConditionResponse;
 
+import java.util.List;
 import java.util.Set;
 
 public interface WorkConditionService {
@@ -11,6 +12,7 @@ public interface WorkConditionService {
     WorkConditionResponse create(SimpleRequest request);
     WorkConditionResponse update(String code, SimpleRequest request);
     void delete(String code);
+    List<WorkConditionResponse> findByName(String name);
 
 
 }

@@ -11,8 +11,12 @@ public interface UserService {
     Set<UserResponse> findByServiceCode(String code);
     UserResponse updateUser(String dni, UserRequest request);
     UserResponse createUser(UserRequest request);
-    void deleteUser(String dni);
+    boolean changeStatus(String dni);
     void deleteRoleUser(String dni,String role);
 
     boolean haveRole(String dni,String role);
+    Set<UserResponse> findByNameContains(String query);
+
+    UserResponse findByStatusAndNameContains(boolean status,String name, String lastName);
+    Set<UserResponse> findUserNotAssignments(String filter);
 }

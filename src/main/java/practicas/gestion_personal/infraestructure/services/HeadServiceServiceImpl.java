@@ -61,6 +61,8 @@ public class HeadServiceServiceImpl implements HeadServiceService {
         roles.add(rol);
         user.setRoles(roles);
         userRepository.save(user);
+        service.setHeadAssigment(true);
+        serviceRepository.save(service);
         HeadServiceEntity bossCreate=HeadServiceEntity.builder()
                 .service(service)
                 .user(user)
@@ -78,7 +80,7 @@ public class HeadServiceServiceImpl implements HeadServiceService {
     @Override
     public Set<HeadServiceResponse> findByStatus(Boolean status) {
 
-        List<HeadServiceEntity> list= headServiceRepository.findAllByStatus(status);
+        List<HeadServiceEntity> list= headServiceRepository.findAllByStatusOrderByIdHeadService(status);
         Set<HeadServiceResponse> response= new HashSet<>();
         for(HeadServiceEntity res:list){
             HeadServiceResponse aux=headServiceMapping.headServiceEntityToResponse(res);
@@ -92,17 +94,22 @@ public class HeadServiceServiceImpl implements HeadServiceService {
 
         UserEntity user = userRepository.findByDni(dniUser).orElseThrow(()-> new IdNotFoundException("user"));
         ServiceEntity service = serviceRepository.findByCode(codeService).orElseThrow(()->new IdNotFoundException("service"));
-        Optional<HeadServiceEntity> headService= headServiceRepository.findByServiceCodeAndStatusAndUserDni(dniUser,true,codeService);
 
-        if (headService.isPresent()){
-            headService.orElseThrow().setStatus(false);
-            headService.orElseThrow().setFinishDate(LocalDate.now());
-            String userAnterior=headService.get().getUser().getDni();
-            userService.deleteRoleUser(userAnterior,ROLE_JEFE);
+        if (user!=null && service!=null){
+            Optional<HeadServiceEntity> headService= headServiceRepository.findByServiceCodeAndStatusAndUserDni(codeService,true,dniUser);
+            if (headService.isPresent()){
+                headService.orElseThrow().setStatus(false);
+                headService.orElseThrow().setFinishDate(LocalDate.now());
+                String userAnterior=headService.get().getUser().getDni();
+                service.setHeadAssigment(false);
+                serviceRepository.save(service);
+                userService.deleteRoleUser(userAnterior,ROLE_JEFE);
 
-        }else{
-            return "El usuario no es jefe del servicio";
-        }
+            }else{
+                return "El usuario no es jefe del servicio";
+            }
+
+
 
         return "se eliminó al jefe del servicio";
     }

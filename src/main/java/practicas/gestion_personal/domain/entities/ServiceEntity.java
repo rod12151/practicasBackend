@@ -25,6 +25,8 @@ public class ServiceEntity {
     private String name;
     @Column(name = "descripcion")
     private String description;
+    @Column(name = "jefeAsignado")
+    private Boolean  headAssigment;
 
     /*relations with entity AssignmentUserService*/
     @OneToMany(mappedBy = "service"    )

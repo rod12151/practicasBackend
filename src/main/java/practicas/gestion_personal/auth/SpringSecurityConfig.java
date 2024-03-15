@@ -45,7 +45,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, "/user").permitAll()
                 .requestMatchers(HttpMethod.GET, "/user/{dni}").permitAll()
-                .requestMatchers("/user/create").permitAll()
+                .requestMatchers("/user/create").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/swagger-ui/**",
                         "/swagger-resources/*",
                         "/v3/api-docs/**").permitAll()

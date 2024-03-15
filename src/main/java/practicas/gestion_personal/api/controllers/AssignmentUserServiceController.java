@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import practicas.gestion_personal.api.models.request.AssignationRequest;
 import practicas.gestion_personal.api.models.response.AssignmentUserServiceResponse;
 import practicas.gestion_personal.infraestructure.abstract_services.AssignmentUserServiceService;
+import practicas.gestion_personal.utils.FilterAssign;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/assignment")
@@ -53,6 +55,11 @@ public class AssignmentUserServiceController {
 
 
     }
+    @GetMapping("/filter")
+    public ResponseEntity<Set<AssignmentUserServiceResponse>> findAllWhitFilter(@RequestParam String option , @RequestParam String filter){
+        return ResponseEntity.ok(assignmentUserService.findAllWhitFilter(option,filter));
+    }
+
 
 
 }

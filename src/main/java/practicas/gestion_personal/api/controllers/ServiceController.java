@@ -1,5 +1,7 @@
 package practicas.gestion_personal.api.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,26 @@ import java.util.Set;
 @AllArgsConstructor
 public class ServiceController {
     private ServiceService serviceService;
+    @Operation(summary = "optener un servico mediante el codigo de servicio")
+    //@Parameter(in = ParameterIn.HEADER,name = "Authorization",description = "Token de Autorizacion",required = true)
     @GetMapping("/{code}")
-    public ResponseEntity<ServiceResponse> findByCode(@PathVariable String code){
+    public ResponseEntity<ServiceResponse> findByCode(
+            @PathVariable String code){
         return ResponseEntity.ok(serviceService.findByCode(code));
     }
     @GetMapping()
     public ResponseEntity<Set<ServiceResponse>> findAll(){
         return ResponseEntity.ok(serviceService.findAll());
     }
+    @GetMapping("services")
+    public ResponseEntity<Set<ServiceResponse>> findAllStatusHeadAssignment(@RequestParam Boolean query){
+        return ResponseEntity.ok(serviceService.findAllByHeadStatus(query));
+    }
+    @GetMapping("services/name")
+    public ResponseEntity<Set<ServiceResponse>> findByNameContains(@RequestParam String name){
+        return ResponseEntity.ok(serviceService.findByNameContains(name));
+    }
+
     @PostMapping("/create")
     public ResponseEntity<ServiceResponse> create( @Valid @RequestBody ServiceRequest request){
         return ResponseEntity.ok(serviceService.create(request));
