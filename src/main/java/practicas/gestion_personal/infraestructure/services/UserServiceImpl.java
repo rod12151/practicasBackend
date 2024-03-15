@@ -136,4 +136,20 @@ public class UserServiceImpl implements UserService {
         }
         return response;
     }
+
+    @Override
+    public UserResponse findByStatusAndNameContains(boolean status, String name, String lastName) {
+        return null;
+    }
+
+    @Override
+    public Set<UserResponse> findUserNotAssignments(String filter) {
+        List<UserEntity> users = userRepository.getUsuariosNoAsignadosActivos(filter,filter);
+        Set<UserResponse> response= new HashSet<>();
+        for(UserEntity res:users){
+            UserResponse aux=userMapping.userEntityToResponse(res);
+            response.add(aux);
+        }
+        return response;
+    }
 }

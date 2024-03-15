@@ -9,14 +9,12 @@ import practicas.gestion_personal.domain.repositories.*;
 import practicas.gestion_personal.infraestructure.abstract_services.AssignmentUserServiceService;
 import practicas.gestion_personal.infraestructure.abstract_services.UserService;
 import practicas.gestion_personal.mapper.AssignmentUserServiceMapping;
+import practicas.gestion_personal.utils.FilterAssign;
 import practicas.gestion_personal.utils.IdNotFoundException;
 import practicas.gestion_personal.utils.UserDuplicate;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -72,15 +70,15 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
     public AssignmentUserServiceResponse createAssigment(AssignationRequest request) {
         UserEntity user = userRepository.findByDni(request.getDniUser()).orElseThrow(()-> new IdNotFoundException("User"));
         ServiceEntity service = serviceRepository.findByCode(request.getCodeService()).orElseThrow(()->new IdNotFoundException("Service"));
-        HeadServiceEntity boss= headServiceRepository.findByServiceCodeAndStatusAndUserDni(request.getCodeService(),true,request.getDniBoss()).orElseThrow(()->new IdNotFoundException("HeadService"));
+        Optional<HeadServiceEntity> boss= headServiceRepository.findByServiceCodeAndStatusAndUserDni(request.getCodeService(),true,request.getDniBoss());
         List<ContractEntity> contracts = contractRepository.findByUserDniAndStatusOrderByIdContractDesc(request.getDniUser(), true);
-        List<AssignmentUserServiceEntity> assignment = assignmentUserServiceRepository.findByUserDniAndServiceCodeAndStatus(request.getDniUser(), request.getCodeService(), true);
+        List<AssignmentUserServiceEntity> assignment = assignmentUserServiceRepository.findByUserDniAndStatus(request.getDniUser(), true);
         boolean isAdmin = userService.haveRole(request.getDniBoss(), ROLE_ADMIN);
         if(contracts.isEmpty()){
             throw new UserDuplicate(request.getDniUser(),"no tiene un contrato vigente");
         } else if (!assignment.isEmpty())  {
             throw new UserDuplicate(request.getDniUser(),"ya está asignado a otro serevicio");
-        } else if (Objects.equals(boss.getService().getCode(), request.getCodeService())||isAdmin) {
+        } else if (boss.isPresent()||isAdmin) {
             AssignmentUserServiceEntity assignmentCreate= AssignmentUserServiceEntity.builder()
                     .startDate(request.getStartDate())
                     .finishDate(request.getFinishDate())
@@ -113,4 +111,30 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
         }
         return false;
     }
+
+    @Override
+    public Set<AssignmentUserServiceResponse> findAllWhitFilter(String assign, String filter) {
+
+        Set<AssignmentUserServiceEntity> valor;
+        Set<AssignmentUserServiceResponse> response = new HashSet<>();
+        if(FilterAssign.valueOf(assign).getClass().isEnum()){
+            switch (FilterAssign.valueOf(assign)) {
+                case filterService -> valor = assignmentUserServiceRepository.filterForService(filter);
+
+                case filterLaborRegime -> valor = assignmentUserServiceRepository.filterForLaborRegime(filter);
+                case filterWorkCondition -> valor = assignmentUserServiceRepository.filterForWorkCondition(filter);
+                default -> {
+                    return response;
+                }
+            }
+            for (AssignmentUserServiceEntity res:valor){
+
+                response.add(assignmentUserServiceMapping.assignmentUserServiceResponse(res));
+            }
+        }
+        return response;
+
+
+    }
+
 }

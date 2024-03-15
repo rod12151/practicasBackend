@@ -83,4 +83,15 @@ public class ServiceServiceImpl implements ServiceService {
         return response;
     }
 
+    @Override
+    public Set<ServiceResponse> findByNameContains(String name) {
+        Set<ServiceEntity> entity = serviceRepository.findByNameContains(name);
+        Set<ServiceResponse> response =new HashSet<>();
+        for (ServiceEntity ser:entity){
+            response.add(modelMapper.map(ser,ServiceResponse.class));
+        }
+
+        return response;
+    }
+
 }

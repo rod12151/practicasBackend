@@ -40,5 +40,10 @@ public class UserController {
         userService.changeStatus(dni);
         return true;
     }
+    @GetMapping("/user/assign")
+    public ResponseEntity<Set<UserResponse>> findUserAssignment(@RequestParam String query){
+         return ResponseEntity.ok(userService.findUserNotAssignments(query));
+
+    }
 
 }

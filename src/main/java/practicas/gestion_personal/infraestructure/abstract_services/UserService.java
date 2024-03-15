@@ -16,4 +16,7 @@ public interface UserService {
 
     boolean haveRole(String dni,String role);
     Set<UserResponse> findByNameContains(String query);
+
+    UserResponse findByStatusAndNameContains(boolean status,String name, String lastName);
+    Set<UserResponse> findUserNotAssignments(String filter);
 }

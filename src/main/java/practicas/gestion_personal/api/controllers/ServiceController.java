@@ -33,6 +33,10 @@ public class ServiceController {
     public ResponseEntity<Set<ServiceResponse>> findAllStatusHeadAssignment(@RequestParam Boolean query){
         return ResponseEntity.ok(serviceService.findAllByHeadStatus(query));
     }
+    @GetMapping("services/name")
+    public ResponseEntity<Set<ServiceResponse>> findByNameContains(@RequestParam String name){
+        return ResponseEntity.ok(serviceService.findByNameContains(name));
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> create( @Valid @RequestBody ServiceRequest request){

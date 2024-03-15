@@ -14,4 +14,5 @@ public interface ServiceService {
 
     ServiceResponse update(String code,ServiceRequest request);
     Set<ServiceResponse> findAllByHeadStatus(Boolean query);
+    Set<ServiceResponse> findByNameContains(String name);
 }
