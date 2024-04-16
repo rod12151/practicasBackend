@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import practicas.gestion_personal.enums.Genero;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -36,6 +37,10 @@ public class UserEntity implements Serializable {
     private String profession;
     @Column(name = "fechaNacimiento")
     private LocalDate birthDate;
+    @Column(name="genero")
+    @Enumerated(EnumType.STRING)
+    private Genero genero;
+
     @Column(name ="estado")
     private boolean status=true;
 

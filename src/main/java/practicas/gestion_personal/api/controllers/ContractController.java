@@ -3,6 +3,7 @@ package practicas.gestion_personal.api.controllers;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practicas.gestion_personal.api.models.request.ContractRequest;
@@ -11,19 +12,21 @@ import practicas.gestion_personal.infraestructure.abstract_services.ContractServ
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/contract")
 @AllArgsConstructor
 public class ContractController {
+
     private ContractService contractService;
     @PostMapping("/create")
     public ResponseEntity<ContractResponse> create(@Valid @RequestBody ContractRequest request){
         return ResponseEntity.ok(contractService.createContract(request));
     }
-    @GetMapping("/filter/{dni}")
-    public  ResponseEntity<Set<ContractResponse>> findByDniUser(@PathVariable String dni){
+    @GetMapping("/filter")
+    public  ResponseEntity<Set<ContractResponse>> findByDniUser(@RequestParam String dni){
         return ResponseEntity.ok(contractService.findByUserDni(dni));
     }
     @GetMapping("/filter/regime")
@@ -51,9 +54,8 @@ public class ContractController {
         return ResponseEntity.ok(contractService.updateContract(id,request));
     }
     @PutMapping("/terminate/{id}")
-    public ResponseEntity<String> terminateContract(@PathVariable Long id){
-        String res= contractService.terminateContract(id);
-        return ResponseEntity.ok(res);
+    public Map<String, Object> terminateContract(@PathVariable Long id){
+        return (contractService.terminateContract(id));
     }
     @GetMapping("/list/{dni}")
     public ResponseEntity<List<ContractResponse>> findByDniUserAndStatus(@PathVariable String dni, @RequestParam boolean status){

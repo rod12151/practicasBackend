@@ -9,10 +9,12 @@ import practicas.gestion_personal.api.models.response.ServiceResponse;
 import practicas.gestion_personal.domain.entities.ServiceEntity;
 import practicas.gestion_personal.domain.repositories.ServiceRepository;
 import practicas.gestion_personal.infraestructure.abstract_services.ServiceService;
+import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 @Service
 @AllArgsConstructor
@@ -65,10 +67,23 @@ public class ServiceServiceImpl implements ServiceService {
     @Transactional()
     public ServiceResponse update(String code, ServiceRequest request) {
         ServiceEntity serviceUpdate =serviceRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("service"));
-        serviceUpdate.setCode(request.getCode());
-        serviceUpdate.setName(request.getName());
-        serviceUpdate.setDescription(request.getDescription());
-        serviceRepository.save(serviceUpdate);
+        if(!code.equals(request.getCode())){
+            Optional<ServiceEntity> serviceAux = serviceRepository.findByCode(request.getCode());
+            if(serviceAux.isPresent()){
+                throw new IdDuplicate("código: "+ request.getCode());
+            }else {
+                serviceUpdate.setCode(request.getCode());
+                serviceUpdate.setName(request.getName());
+                serviceUpdate.setDescription(request.getDescription());
+                serviceRepository.save(serviceUpdate);
+            }
+        }else {
+            
+            serviceUpdate.setName(request.getName());
+            serviceUpdate.setDescription(request.getDescription());
+            serviceRepository.save(serviceUpdate);
+        }
+
         return modelMapper.map(serviceUpdate,ServiceResponse.class);
     }
 

@@ -31,6 +31,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findByNameContains(query));
 
     }
+    @GetMapping(path = "/no/contract")
+    public ResponseEntity<Set<UserResponse>> findByWithoutContract(@RequestParam String query){
+        return ResponseEntity.ok(userService.findAllByWithoutContract (query));
+
+    }
     @PostMapping("/create")
     public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest request){
         return ResponseEntity.ok(userService.createUser(request));
@@ -44,6 +49,15 @@ public class UserController {
     public ResponseEntity<Set<UserResponse>> findUserAssignment(@RequestParam String query){
          return ResponseEntity.ok(userService.findUserNotAssignments(query));
 
+    }
+    @GetMapping("/boss/assign")
+    public ResponseEntity<Set<UserResponse>> findBossAssignment(@RequestParam String query) {
+        return ResponseEntity.ok(userService.findBossNotAssignments(query));
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<UserResponse> updateUser( @Valid @RequestParam String dni,@RequestBody UserRequest user){
+        return ResponseEntity.ok(userService.updateUser(dni, user));
     }
 
 }

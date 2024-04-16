@@ -13,10 +13,9 @@ public class AssignmentUserServiceMapping {
     public AssignmentUserServiceResponse assignmentUserServiceResponse(AssignmentUserServiceEntity assignmentUserService){
 
 
-        AssignmentUserServiceResponse response = modelMapper.map(assignmentUserService,AssignmentUserServiceResponse.class);
-        response.getUser().setFullName(assignmentUserService.getUser().getName()+" "+assignmentUserService.getUser().getLastName());
+        // response.getUser().setFullName(assignmentUserService.getUser().getName()+" "+assignmentUserService.getUser().getLastName());
 
 
-    return response;
+    return modelMapper.map(assignmentUserService,AssignmentUserServiceResponse.class);
 
 }}

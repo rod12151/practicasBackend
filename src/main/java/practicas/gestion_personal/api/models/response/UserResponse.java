@@ -11,7 +11,8 @@ public class UserResponse {
     private Long idUser;
     private String dni;
     private String username;
-    private String fullName;
+    private String name;
+    private String lastName;
     private String profession;
     private boolean status;
 

@@ -21,7 +21,7 @@ public class WorkConditionEntity {
     private Long idWorkCondition;
     @Column(name = "codigo",length = 8,unique = true)
     private String code;
-    @Column(name = "nombre",length = 20,nullable = false)
+    @Column(name = "nombre",length = 30,nullable = false)
     private String name;
     @Column(name = "descripcion")
     private String description;

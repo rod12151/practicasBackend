@@ -5,12 +5,14 @@ import practicas.gestion_personal.api.models.response.HeadServiceResponse;
 
 import java.util.List;
 
+import java.util.Map;
 import java.util.Set;
 
 public interface HeadServiceService {
-    HeadServiceResponse create(HeadServiceCreateRequest request);
+    //HeadServiceResponse create(HeadServiceCreateRequest request);
+    HeadServiceResponse createBoss(HeadServiceCreateRequest request);
     Set<HeadServiceResponse> findByStatus(Boolean status);
-    String deleteHeadService(String dniUser, String codeService);
+    Map<String,Object> deleteHeadService(String dniUser, String codeService);
     List<HeadServiceResponse> findByService(String code, boolean status);
 
 }

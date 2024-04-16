@@ -137,4 +137,16 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
 
     }
 
+    @Override
+    public void forceTerminateAssign(String id) {
+        Optional<AssignmentUserServiceEntity> assignmentUserService=assignmentUserServiceRepository.selectByIdYStatus(id);
+        if (assignmentUserService.isPresent()){
+            AssignmentUserServiceEntity update = assignmentUserService.get();
+            update.setStatus(false);
+            update.setFinishDate(LocalDate.now());
+            assignmentUserServiceRepository.save(update);
+        }
+
+    }
+
 }

@@ -10,10 +10,9 @@ public class ContractMapping {
     public ContractResponse entityToResponse(ContractEntity entity){
 
         ModelMapper modelMapper=new ModelMapper();
-        ContractResponse response = modelMapper.map(entity,ContractResponse.class);
-        response.getUser().setFullName(entity.getUser().getName()+" "+entity.getUser().getLastName());
+        //response.getUser().setFullName(entity.getUser().getName()+" "+entity.getUser().getLastName());
 
-        return response;
+        return modelMapper.map(entity,ContractResponse.class);
 
     }
 }
