@@ -9,8 +9,7 @@ import practicas.gestion_personal.domain.entities.UserEntity;
 public class UserMapping {
     public UserResponse userEntityToResponse(UserEntity user){
         ModelMapper modelMapper=new ModelMapper();
-        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-        userResponse.setFullName(user.getName()+" "+user.getLastName());
-        return userResponse;
+        //userResponse.setFullName(user.getName()+" "+user.getLastName());
+        return modelMapper.map(user, UserResponse.class);
     }
 }

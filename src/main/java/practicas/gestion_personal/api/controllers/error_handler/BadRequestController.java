@@ -9,6 +9,7 @@ import practicas.gestion_personal.api.models.response.ErrorResponse;
 import practicas.gestion_personal.api.models.response.ErrorsResponse;
 import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
+import practicas.gestion_personal.utils.ServiceWithBoss;
 import practicas.gestion_personal.utils.UserDuplicate;
 
 import java.util.ArrayList;
@@ -48,6 +49,15 @@ public class BadRequestController {
     }
     @ExceptionHandler(UserDuplicate.class)
     public ErrorResponse userHaveRole(UserDuplicate exception){
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST.name())
+                .code(HttpStatus.BAD_REQUEST.value())
+                .build();
+
+    }
+    @ExceptionHandler(ServiceWithBoss.class)
+    public ErrorResponse ServiceWithBoss(UserDuplicate exception){
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST.name())

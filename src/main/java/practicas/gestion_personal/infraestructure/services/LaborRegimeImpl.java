@@ -58,10 +58,27 @@ public class LaborRegimeImpl implements LaborRegimeService {
 
     @Override
     public LaborRegimeResponse update(String code, SimpleRequest request) {
-        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
-        laborRegimeUpdate.setCode(request.getCode());
-        laborRegimeUpdate.setName(request.getName());
-        laborRegimeUpdate.setDescription(request.getDescription());
+
+        LaborRegimeEntity laborRegimeUpdate=laborRegimeRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("laborRegime"));
+        String codeNuevo=request.getCode();
+        if (!code.equals(codeNuevo)){
+            Optional<LaborRegimeEntity> laborRegimeAux=laborRegimeRepository.findByCode(codeNuevo);
+            if (laborRegimeAux.isPresent()){
+                throw new  IdDuplicate("código: "+ request.getCode());
+            }else{
+                laborRegimeUpdate.setCode(codeNuevo);
+                laborRegimeUpdate.setName(request.getName());
+                laborRegimeUpdate.setDescription(request.getDescription());
+
+            }
+
+        }else {
+            laborRegimeUpdate.setName(request.getName());
+            laborRegimeUpdate.setDescription(request.getDescription());
+        }
+
+
+
         laborRegimeRepository.save(laborRegimeUpdate);
         return modelMapper.map(laborRegimeUpdate, LaborRegimeResponse.class);
     }

@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import practicas.gestion_personal.domain.entities.AssignmentUserServiceEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface AssignmentUserServiceRepository extends JpaRepository<AssignmentUserServiceEntity,Long> {
@@ -35,5 +36,11 @@ public interface AssignmentUserServiceRepository extends JpaRepository<Assignmen
             " where us.status =true and c.status=true and s.name Like %:filter%")
     Set<AssignmentUserServiceEntity> filterForService(@Param("filter") String filter);
 
+    @Query("select us from usuarioServicio us join usuario u on " +
+            "us.user.idUser=u.idUser where us.status=true and us.user.idUser=:id")
+   Optional<AssignmentUserServiceEntity>  selectByIdYStatus(@Param("id") String id);
+
+    @Query("select us from usuarioServicio us where us.status=true and us.user.dni=:dni and us.service.code=:service ")
+    Optional<AssignmentUserServiceEntity>  selectByDniCoDeServiceExist(@Param("dni") String dni,@Param("service") String service);
 
 }

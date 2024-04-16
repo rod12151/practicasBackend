@@ -59,11 +59,26 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public WorkConditionResponse update(String code, SimpleRequest request) {
-        WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
-        workConditionUpdate.setCode(request.getCode());
-        workConditionUpdate.setName(request.getName());
-        workConditionUpdate.setDescription(request.getDescription());
+
+        WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+        String codeNuevo=request.getCode();
+        if(!code.equals(codeNuevo)){
+            Optional<WorkConditionEntity> workConditionAux=workConditionRepository.findByCode(codeNuevo);
+            if (workConditionAux.isPresent()){
+                throw new  IdDuplicate("código: "+ request.getCode());
+            }else{
+                workConditionUpdate.setCode(codeNuevo);
+                workConditionUpdate.setName(request.getName());
+                workConditionUpdate.setDescription(request.getDescription());
+            }
+        }else{
+            workConditionUpdate.setName(request.getName());
+            workConditionUpdate.setDescription(request.getDescription());
+
+        }
+
         workConditionRepository.save(workConditionUpdate);
+
         return modelMapper.map(workConditionUpdate, WorkConditionResponse.class);
     }
 

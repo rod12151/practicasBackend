@@ -8,6 +8,7 @@ import practicas.gestion_personal.api.models.response.HeadServiceResponse;
 import practicas.gestion_personal.infraestructure.abstract_services.HeadServiceService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -17,7 +18,7 @@ public class HeadServiceController {
     private HeadServiceService headServiceService;
     @PostMapping("/create")
     public ResponseEntity<HeadServiceResponse> createBoss(@RequestBody HeadServiceCreateRequest request){
-        return ResponseEntity.ok(headServiceService.create(request));
+        return ResponseEntity.ok(headServiceService.createBoss(request));
     }
     @GetMapping("/find/{status}")
     public ResponseEntity<Set<HeadServiceResponse>> findByStatus(@PathVariable Boolean status){
@@ -26,7 +27,7 @@ public class HeadServiceController {
     }
 
     @PutMapping("delete/{code}/{dni}")
-    public ResponseEntity<String> deleteHeadService(@PathVariable String code,@PathVariable String dni){
+    public ResponseEntity<Map<String,Object>> deleteHeadService(@PathVariable String code, @PathVariable String dni){
         return ResponseEntity.ok(headServiceService.deleteHeadService(dni,code));
 
     }

@@ -14,10 +14,9 @@ public class HeadServiceMapping {
     }
     public HeadServiceResponse headServiceEntityToResponse(HeadServiceEntity headService){
 
-    HeadServiceResponse response = modelMapper.map(headService,HeadServiceResponse.class);
-    response.getUser().setFullName(headService.getUser().getName()+" "+headService.getUser().getLastName());
+        //response.getUser().setFullName(headService.getUser().getName()+" "+headService.getUser().getLastName());
 
 
-    return response;
+    return modelMapper.map(headService,HeadServiceResponse.class);
 
 }}

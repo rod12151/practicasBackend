@@ -14,5 +14,6 @@ public interface AssignmentUserServiceService {
     AssignmentUserServiceResponse createAssigment(AssignationRequest request);
     boolean terminateAssignation(String codeService,String dniBoss,String dniUser);
     Set<AssignmentUserServiceResponse> findAllWhitFilter(String assign, String filter);
+    void forceTerminateAssign(String id);
 
 }
