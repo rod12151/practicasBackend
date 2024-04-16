@@ -17,7 +17,7 @@ import java.util.Set;
 public class LaborRegimeController {
     private LaborRegimeService laborRegimeService;
     @GetMapping("/{code}")
-    public ResponseEntity<?> findByCode(@Valid @PathVariable String code){
+    public ResponseEntity<LaborRegimeResponse> findByCode(@Valid @PathVariable String code){
         return ResponseEntity.ok(laborRegimeService.findByCode(code));
     }
     @GetMapping

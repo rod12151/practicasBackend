@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface AssignmentUserServiceRepository extends JpaRepository<AssignmentUserServiceEntity,Long> {
+
     List<AssignmentUserServiceEntity> findByServiceCodeAndStatus(String service_code, boolean status);
     List<AssignmentUserServiceEntity> findByStatusOrderByService(boolean status);
     List<AssignmentUserServiceEntity> findByUserDniAndStatus(String user_dni, boolean status);
@@ -41,4 +42,5 @@ public interface AssignmentUserServiceRepository extends JpaRepository<Assignmen
 
     @Query("select us from usuarioServicio us where us.status=true and us.user.dni=:dni and us.service.code=:service ")
     Optional<AssignmentUserServiceEntity>  selectByDniCoDeServiceExist(@Param("dni") String dni,@Param("service") String service);
+
 }

@@ -5,7 +5,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import practicas.gestion_personal.api.models.response.HeadServiceResponse;
 import practicas.gestion_personal.domain.entities.HeadServiceEntity;
+
 @Component
+
 public class HeadServiceMapping {
     ModelMapper modelMapper=new ModelMapper();
     public HeadServiceMapping() {

@@ -14,8 +14,10 @@ import practicas.gestion_personal.utils.IdDuplicate;
 import practicas.gestion_personal.utils.IdNotFoundException;
 import practicas.gestion_personal.utils.UserDuplicate;
 
+
 import java.lang.reflect.Type;
 import java.util.*;
+
 
 @Service
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class WorkConditionImpl implements WorkConditionService {
     private ModelMapper modelMapper;
     @Override
     public WorkConditionResponse findByCode(String code) {
-        WorkConditionEntity workCondition =workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+        WorkConditionEntity workCondition =workConditionRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
 
         return modelMapper.map(workCondition, WorkConditionResponse.class);
     }
@@ -57,6 +59,7 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public WorkConditionResponse update(String code, SimpleRequest request) {
+
         WorkConditionEntity workConditionUpdate=workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
         String codeNuevo=request.getCode();
         if(!code.equals(codeNuevo)){
@@ -73,6 +76,7 @@ public class WorkConditionImpl implements WorkConditionService {
             workConditionUpdate.setDescription(request.getDescription());
 
         }
+
         workConditionRepository.save(workConditionUpdate);
 
         return modelMapper.map(workConditionUpdate, WorkConditionResponse.class);
@@ -80,10 +84,11 @@ public class WorkConditionImpl implements WorkConditionService {
 
     @Override
     public void delete(String code) {
-        WorkConditionEntity workCondition = workConditionRepository.findByCode(code).orElseThrow(()->new IdNotFoundException("workCondition"));
+        WorkConditionEntity workCondition = workConditionRepository.findByCode(code).orElseThrow(getIdNotFoundExceptionSupplier());
         workConditionRepository.delete(workCondition);
 
     }
+
 
     @Override
     public List<WorkConditionResponse> findByName(String name) {

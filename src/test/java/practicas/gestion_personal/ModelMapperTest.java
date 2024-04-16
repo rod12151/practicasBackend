@@ -2,7 +2,6 @@ package practicas.gestion_personal;
 
 
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import practicas.gestion_personal.api.models.response.HeadServiceResponse;
 import practicas.gestion_personal.api.models.response.ServiceResponse;
 import practicas.gestion_personal.api.models.response.UserResponse;
@@ -16,9 +15,11 @@ import practicas.gestion_personal.mapper.UserMapping;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-public class ModelMapperTest {
+class ModelMapperTest {
     @Test
+
      void testUserMapping(){
+
         UserMapping userMapping = new UserMapping();
         UserEntity user =new UserEntity();
         user.setIdUser(1L);
@@ -34,7 +35,9 @@ public class ModelMapperTest {
         assertEquals(user.getName()+" "+user.getLastName(),userResponse.getFullName());
     }
     @Test
+
      void testServiceMapping(){
+
         ServiceMapping serviceMapping=new ServiceMapping();
         ServiceEntity service = new ServiceEntity();
         service.setIdService(1L);
@@ -50,7 +53,9 @@ public class ModelMapperTest {
     }
 
     @Test
+
      void testHeadServiceMapping(){
+
         HeadServiceMapping headServiceMapping=new HeadServiceMapping();
         HeadServiceEntity headService = new HeadServiceEntity();
         ServiceEntity service = new ServiceEntity();

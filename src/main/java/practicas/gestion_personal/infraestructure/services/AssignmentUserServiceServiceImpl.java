@@ -78,7 +78,10 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
             throw new UserDuplicate(request.getDniUser(),"no tiene un contrato vigente");
         } else if (!assignment.isEmpty())  {
             throw new UserDuplicate(request.getDniUser(),"ya está asignado a otro serevicio");
+
         } else if (boss.isPresent()||isAdmin) {
+
+       
             AssignmentUserServiceEntity assignmentCreate= AssignmentUserServiceEntity.builder()
                     .startDate(request.getStartDate())
                     .finishDate(request.getFinishDate())
@@ -93,6 +96,7 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
         }else{
             throw new UserDuplicate(request.getDniBoss(),"no es jefe del servicio,tampoco es administrador");
         }
+
 
     }
 

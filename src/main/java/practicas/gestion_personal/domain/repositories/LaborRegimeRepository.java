@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import practicas.gestion_personal.domain.entities.LaborRegimeEntity;
 
 import java.util.List;
+
 import java.util.Optional;
 
 public interface LaborRegimeRepository extends JpaRepository<LaborRegimeEntity,Long> {

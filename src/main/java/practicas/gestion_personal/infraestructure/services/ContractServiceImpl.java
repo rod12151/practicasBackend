@@ -35,11 +35,13 @@ public class ContractServiceImpl implements ContractService {
     @Transactional(readOnly = true)
     public Set<ContractResponse> findByUserDni(String dni) {
 
+
         Set<ContractResponse> response = new HashSet<>();
         var contract = contractRepository.selectIfDniContains(dni);
         for (ContractEntity res : contract) {
             ContractResponse aux = contractMapping.entityToResponse(res);
             response.add(aux);
+
 
         }
         return response;
@@ -50,11 +52,13 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Set<ContractResponse> findByLaborRegimeCode(String code) {
 
+
         Set<ContractResponse> response = new HashSet<>();
         Set<ContractEntity> contract = contractRepository.LaborRegimeContains(code);
         for (ContractEntity res : contract) {
             ContractResponse aux = contractMapping.entityToResponse(res);
             response.add(aux);
+
 
         }
         return response;
@@ -65,11 +69,13 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public Set<ContractResponse> findByWorkConditionCode(String code) {
 
+
         Set<ContractResponse> response = new HashSet<>();
         Set<ContractEntity> contract = contractRepository.WorkConditionsContains(code);
         for (ContractEntity res : contract) {
             ContractResponse aux = contractMapping.entityToResponse(res);
             response.add(aux);
+
 
         }
         return response;
@@ -161,6 +167,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<ContractResponse> listContractUser(String dni, boolean status) {
+
         Optional<UserEntity> user = userRepository.findByDni(dni);
         if (user.isPresent()) {
             List<ContractEntity> contracts = contractRepository.findByUserDniAndStatusOrderByIdContractDesc(dni, status);
@@ -173,6 +180,7 @@ public class ContractServiceImpl implements ContractService {
         }
         {
             throw new IdNotFoundException("user");
+
         }
 
     }
