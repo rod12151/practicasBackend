@@ -50,6 +50,11 @@ public interface ContractRepository extends JpaRepository<ContractEntity,Long> {
             "c.user.idUser = us.user.idUser " +
             "WHERE (c.status=true and us.status=true) and (c.laborRegime.code=:codeRl and us.service.code=:codeS) ")
     Integer countContractForRegime(@Param("codeRl") String codeRl,@Param("codeS") String codeS);
+    //cuentra la cantidad de contratos asignados a un servicio y que pertenescan a un regimen
+    @Query("SELECT count (c.idContract) FROM contrato c inner join usuarioServicio us on " +
+            "c.user.idUser = us.user.idUser " +
+            "WHERE (c.status=true and us.status=true) and (c.workCondition.code=:codeWc and us.service.code=:codeS) ")
+    Integer countContractForWorkCondition(@Param("codeWc") String codeWc,@Param("codeS") String codeS);
 /*
     @Query("SELECT count (c.idContract) FROM contrato c inner join usuarioServicio us on " +
             "c.user.idUser = us.user.idUser " +

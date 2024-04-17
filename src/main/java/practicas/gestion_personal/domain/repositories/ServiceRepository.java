@@ -14,7 +14,7 @@ public interface ServiceRepository extends JpaRepository<ServiceEntity,Long> {
     Set<ServiceEntity> findByHeadAssigment(Boolean headAssigment);
     Set<ServiceEntity> findByNameContains(String name);
 
-    @Query("select distinct u.code from servicio u")
-    String[] codeServices();
+    @Query("select distinct u.code,u.name from servicio u")
+    List<String[]> codeServices();
 
 }

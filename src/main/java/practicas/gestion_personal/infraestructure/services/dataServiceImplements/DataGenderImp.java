@@ -3,6 +3,7 @@ package practicas.gestion_personal.infraestructure.services.dataServiceImplement
 import lombok.AllArgsConstructor;
 import lombok.Generated;
 import org.springframework.stereotype.Component;
+import practicas.gestion_personal.domain.repositories.ServiceRepository;
 import practicas.gestion_personal.domain.repositories.UserRepository;
 import practicas.gestion_personal.enums.Genero;
 import practicas.gestion_personal.infraestructure.abstract_services.data_services_abstract.DataGenderAbstract;
@@ -19,6 +20,7 @@ import static practicas.gestion_personal.enums.Genero.MASCULINO;
 @AllArgsConstructor
 public class DataGenderImp implements DataGenderAbstract {
     private final UserRepository userRepository;
+    private final ServiceRepository serviceRepository;
 
     @Override
     public Map<String, Object> countGender() {
@@ -42,16 +44,33 @@ public class DataGenderImp implements DataGenderAbstract {
         //Enfer001
         Map<String,Object> response = new HashMap<>();
         List<String> gender =  new ArrayList<>();
-        List<Integer> date = new ArrayList<>();
+        List<Integer> data = new ArrayList<>();
         Genero[] generos={MASCULINO,FEMENINO};
         for (Genero tag : generos) {
             Integer num = userRepository.countGenderService(tag,code);
             gender.add(String.valueOf(tag));
-            date.add(num);
+            data.add(num);
 
         }
         response.put("generos",gender);
-        response.put("date",date);
+        response.put("date",data);
+        return response;
+    }
+
+    @Override
+    public List<Map<String, Object>> countAllGenderForService() {
+        List<Map<String, Object>> response = new ArrayList<>();
+        List<String[]> codeServices=serviceRepository.codeServices();
+        for(String[] service:codeServices){
+            String name=service[1];
+            String code = service[0];
+            Map<String,Object> res=new HashMap<>();
+
+            res=(countGenderService(code));
+            res.put("name",name);
+            response.add(res);
+
+        }
         return response;
     }
 }

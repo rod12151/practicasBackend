@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import practicas.gestion_personal.infraestructure.services.dataServiceImplements.DataContractImpl;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +26,11 @@ public class DataContractController {
     @GetMapping("/regime")
     public ResponseEntity<Map<String,Object>> findContractRegime(@RequestParam String code){
         return ResponseEntity.ok(dataContractImpl.countAllContractRegimeLaboral(code));
+
+    }
+    @GetMapping("/condition")
+    public ResponseEntity<Map<String,Object>> findContractWorkCondition(@RequestParam String code){
+        return ResponseEntity.ok(dataContractImpl.countAllContractWorkCondition(code));
 
     }
 }

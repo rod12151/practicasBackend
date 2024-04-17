@@ -12,5 +12,5 @@ public interface WorkConditionRepository extends JpaRepository<WorkConditionEnti
       List<WorkConditionEntity> findByNameContains(String name);
 
       @Query("select distinct cl.code,cl.name as nombre from condicionLaboral cl")
-      String[] codeRegimen();
+      List<String[]> codeRegimen();
 }
