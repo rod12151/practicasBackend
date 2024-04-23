@@ -39,7 +39,7 @@ public interface ContractRepository extends JpaRepository<ContractEntity,Long> {
 
     /*metodos para extraer datos numericos*/
     //cuentra la cantidad de contratos asignados a un servicio
-    @Query("SELECT count (c.idContract) FROM contrato c inner join usuarioServicio us on " +
+    @Query("SELECT count (c.idContract)  FROM contrato c inner join usuarioServicio us on " +
             "c.user.idUser = us.user.idUser " +
             "WHERE (c.status=true and us.status=true) and us.service.code=:code")
     Integer countContractForService(@Param("code") String code);

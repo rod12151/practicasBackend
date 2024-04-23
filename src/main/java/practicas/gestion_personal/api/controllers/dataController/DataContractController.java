@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import practicas.gestion_personal.api.models.response.dataResponse.DataGenericGrafic;
 import practicas.gestion_personal.infraestructure.services.dataServiceImplements.DataContractImpl;
 
 import java.util.List;
@@ -19,17 +20,17 @@ public class DataContractController {
     private final DataContractImpl dataContractImpl;
 
     @GetMapping("/service")
-    public ResponseEntity<Map<String,Object>> findContractService(){
-        return ResponseEntity.ok(dataContractImpl.countAllContractService());
+    public ResponseEntity<DataGenericGrafic> findContractService(){
+        return ResponseEntity.ok(dataContractImpl.countAll());
 
     }
     @GetMapping("/regime")
-    public ResponseEntity<Map<String,Object>> findContractRegime(@RequestParam String code){
+    public ResponseEntity<DataGenericGrafic> findContractRegime(@RequestParam String code){
         return ResponseEntity.ok(dataContractImpl.countAllContractRegimeLaboral(code));
 
     }
     @GetMapping("/condition")
-    public ResponseEntity<Map<String,Object>> findContractWorkCondition(@RequestParam String code){
+    public ResponseEntity<DataGenericGrafic> findContractWorkCondition(@RequestParam String code){
         return ResponseEntity.ok(dataContractImpl.countAllContractWorkCondition(code));
 
     }

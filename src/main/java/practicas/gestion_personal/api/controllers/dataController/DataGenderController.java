@@ -21,6 +21,8 @@ public class DataGenderController {
         return ResponseEntity.ok(dataGenderImp.countGender());
 
     }
+    //"http://localhost:8080/data/gender/service?data=Enfer001: 403 OK"
+
     @GetMapping("/service")
     public ResponseEntity<Map<String,Object>> findUserAssignmentService(@RequestParam String code){
         return ResponseEntity.ok(dataGenderImp.countGenderService(code));
