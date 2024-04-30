@@ -25,7 +25,7 @@ public class UserRequest {
     private String password;*/
     @NotBlank(message = "se debe ingresar una profesion")
     private String profession;
-    @Past()
+    @Past(message = "ingrese una Fecha anterior")
     private LocalDate birthDate;
     private Genero genero;
 

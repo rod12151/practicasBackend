@@ -25,41 +25,42 @@ public class DataContractImpl implements DataContractAbstract {
 
     @Override
     public Map<String, Object> countAllContractService() {
-         Map<String,Object> response = new HashMap<>();
-         List<String> names=new ArrayList<>();
-         List<String> codes =new ArrayList<>();
-         List<Integer> dats=new ArrayList<>();
+        Map<String, Object> response = new HashMap<>();
+        List<String> names = new ArrayList<>();
+        List<String> codes = new ArrayList<>();
+        List<Integer> dats = new ArrayList<>();
 
-        List<String[]> Services=serviceRepository.codeServices();
-        for(String[] tag:Services){
+        List<String[]> Services = serviceRepository.codeServices();
+        for (String[] tag : Services) {
             String name = tag[1];
             String code = tag[0];
-            Map<String,Object> ser=new HashMap<>();
-            ser=countContractService(code);
+            Map<String, Object> ser = new HashMap<>();
+            ser = countContractService(code);
             Integer data = (Integer) ser.get("data");
             names.add(name);
             codes.add(code);
             dats.add(data);
 
         }
-        response.put("names",names);
-        response.put("codes",codes);
-        response.put("dats",dats);
+        response.put("names", names);
+        response.put("codes", codes);
+        response.put("dats", dats);
 
 
         return response;
 
     }
+
     @Override
-    public DataGenericGrafic countAll() {
+    public DataGenericGrafic countAllContractOfServices() {
         DataGenericGrafic response = new DataGenericGrafic();
-        ListForDatsGraphics lists=new ListForDatsGraphics();
-        List<String[]> Services=serviceRepository.codeServices();
-        for(String[] tag:Services){
+        ListForDatsGraphics lists = new ListForDatsGraphics();
+        List<String[]> Services = serviceRepository.codeServices();
+        for (String[] tag : Services) {
             String name = tag[1];
             String code = tag[0];
-            Map<String,Object> ser=new HashMap<>();
-            ser=countContractService(code);
+            Map<String, Object> ser = new HashMap<>();
+            ser = countContractService(code);
             Integer data = (Integer) ser.get("data");
             lists.getNames().add(name);
 
@@ -77,29 +78,69 @@ public class DataContractImpl implements DataContractAbstract {
     }
 
     @Override
-    public Map<String, Object> countContractService(String code) {
-        Map<String,Object> response = new HashMap<>();
+    public DataGenericGrafic countAllContractOfRegimes() {
+        DataGenericGrafic response = new DataGenericGrafic();
+        ListForDatsGraphics lists = new ListForDatsGraphics();
+        List<String[]> codeLaborRegime = laborRegimeRepository.codeRegimen();
+        for (String[] tag : codeLaborRegime) {
+            String code = tag[0];
+            String name = tag[1];
+            Integer count = contractRepository.countContractForRegime(code);
+            lists.getDats().add(count);
+            lists.getNames().add(name);
+            lists.getCodes().add(code);
+        }
+        response.setCodes(lists.getCodes());
+        response.setNames(lists.getNames());
+        response.setDats(lists.getDats());
 
-         Integer data = contractRepository.countContractForService(code);
-        response.put("code",code);
-        response.put("data",data);
+        return response;
+    }
+
+    @Override
+    public DataGenericGrafic countAllContractOfWorks() {
+        DataGenericGrafic response = new DataGenericGrafic();
+        ListForDatsGraphics lists = new ListForDatsGraphics();
+        List<String[]> codeLaborRegime = workConditionRepository.codeRegimen();
+        for (String[] tag : codeLaborRegime) {
+            String code = tag[0];
+            String name = tag[1];
+            Integer count = contractRepository.countContractForWorkCondition(code);
+            lists.getDats().add(count);
+            lists.getNames().add(name);
+            lists.getCodes().add(code);
+        }
+        response.setCodes(lists.getCodes());
+        response.setNames(lists.getNames());
+        response.setDats(lists.getDats());
+
+        return response;
+    }
+
+    @Override
+    public Map<String, Object> countContractService(String code) {
+        Map<String, Object> response = new HashMap<>();
+
+        Integer data = contractRepository.countContractForService(code);
+        response.put("code", code);
+        response.put("data", data);
 
 
         return response;
     }
 
     @Override
-    public DataGenericGrafic countAllContractRegimeLaboral(String codeSer) {
+    public DataGenericGrafic countAllContractRegimeLaboralForService(String codeSer) {
         Optional<ServiceEntity> service = serviceRepository.findByCode(codeSer);
-        if (service.isPresent()){
-            DataGenericGrafic response = new DataGenericGrafic();
-            ListForDatsGraphics lists=new ListForDatsGraphics();
-            List<String[]> codeLaborRegime=laborRegimeRepository.codeRegimen();
+        DataGenericGrafic response = new DataGenericGrafic();
+        ListForDatsGraphics lists = new ListForDatsGraphics();
+        List<String[]> codeLaborRegime = laborRegimeRepository.codeRegimen();
+        if (service.isPresent()) {
 
-            for(String[] tag:codeLaborRegime){
-                String code=tag[0];
+            for (String[] tag : codeLaborRegime) {
+                String code = tag[0];
                 String name = tag[1];
-                Integer count=contractRepository.countContractForRegime(code,codeSer);
+                Integer count = contractRepository.countContractForRegime(code, codeSer);
                 lists.getDats().add(count);
                 lists.getNames().add(name);
                 lists.getCodes().add(code);
@@ -109,24 +150,24 @@ public class DataContractImpl implements DataContractAbstract {
             response.setDats(lists.getDats());
 
             return response;
-        }else {
+        } else {
             throw new IdNotFoundException("Servicio");
         }
 
     }
 
     @Override
-    public DataGenericGrafic countAllContractWorkCondition(String codeSer) {
+    public DataGenericGrafic countAllContractWorkConditionForService(String codeSer) {
         Optional<ServiceEntity> service = serviceRepository.findByCode(codeSer);
-        if (service.isPresent()){
-            DataGenericGrafic response = new DataGenericGrafic();
-            ListForDatsGraphics lists=new ListForDatsGraphics();
-            List<String[]> codeLaborRegime=laborRegimeRepository.codeRegimen();
+        DataGenericGrafic response = new DataGenericGrafic();
+        ListForDatsGraphics lists = new ListForDatsGraphics();
+        List<String[]> codeLaborRegime = workConditionRepository.codeRegimen();
+        if (service.isPresent()) {
 
-            for(String[] tag:codeLaborRegime){
-                String code=tag[0];
+            for (String[] tag : codeLaborRegime) {
+                String code = tag[0];
                 String name = tag[1];
-                Integer count=contractRepository.countContractForWorkCondition(code,codeSer);
+                Integer count = contractRepository.countContractForWorkCondition(code, codeSer);
                 lists.getDats().add(count);
                 lists.getNames().add(name);
                 lists.getCodes().add(code);
@@ -137,14 +178,12 @@ public class DataContractImpl implements DataContractAbstract {
 
             return response;
 
-        }else {
+        } else {
             throw new IdNotFoundException("Servicio");
         }
 
 
     }
-
-
 
 
 }

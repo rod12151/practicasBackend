@@ -5,11 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class GenderValue implements Serializable {
-    private String gender;
-    private int count;
+public class DataGenderGraphic implements Serializable {
+    private List<String> genders;
+    private List<Integer> dats;
+    private String name;
 }
