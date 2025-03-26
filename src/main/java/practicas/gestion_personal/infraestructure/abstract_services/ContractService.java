@@ -24,5 +24,7 @@ public interface ContractService {
     Map<String,Object> terminateContract(Long id);
     List<ContractResponse> listContractUser(String dni,boolean status);
 
+    void actualizarContratosVencidos();
+
 
 }

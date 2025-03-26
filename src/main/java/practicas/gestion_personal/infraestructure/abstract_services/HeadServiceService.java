@@ -14,5 +14,6 @@ public interface HeadServiceService {
     Set<HeadServiceResponse> findByStatus(Boolean status);
     Map<String,Object> deleteHeadService(String dniUser, String codeService);
     List<HeadServiceResponse> findByService(String code, boolean status);
+    void actualizarJefeServicioFinContrato();
 
 }

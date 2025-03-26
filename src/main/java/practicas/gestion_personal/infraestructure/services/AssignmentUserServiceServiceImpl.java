@@ -1,7 +1,9 @@
 package practicas.gestion_personal.infraestructure.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.api.models.request.AssignationRequest;
 import practicas.gestion_personal.api.models.response.AssignmentUserServiceResponse;
 import practicas.gestion_personal.domain.entities.*;
@@ -146,6 +148,24 @@ public class AssignmentUserServiceServiceImpl implements AssignmentUserServiceSe
             update.setFinishDate(LocalDate.now());
             assignmentUserServiceRepository.save(update);
         }
+
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 0 * * ?") // A medianoche todos los días
+    @Transactional
+    public void actualizarAsignacionesVencidas() {
+        LocalDate hoy =LocalDate.now();
+        Set<AssignmentUserServiceEntity> asignacionesVencidas =
+                assignmentUserServiceRepository.findAllByFinishDateIsBeforeAndStatusIsTrue(hoy);
+        if (asignacionesVencidas.isEmpty()){
+            return;
+        }
+        for(AssignmentUserServiceEntity assignmentUserService:asignacionesVencidas){
+            assignmentUserService.setStatus(false);
+        }
+        assignmentUserServiceRepository.saveAll(asignacionesVencidas);
+        System.out.println("se actualizaron "+ asignacionesVencidas.size()+"asignaciones vencidas");
 
     }
 

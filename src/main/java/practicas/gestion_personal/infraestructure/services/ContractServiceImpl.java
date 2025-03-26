@@ -1,6 +1,7 @@
 package practicas.gestion_personal.infraestructure.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.api.models.request.ContractRequest;
@@ -174,6 +175,23 @@ public class ContractServiceImpl implements ContractService {
         {
             throw new IdNotFoundException("user");
         }
+
+    }
+    @Override
+    @Scheduled(cron = "0 0 0 * * ?") // A medianoche todos los días
+    @Transactional
+    public void actualizarContratosVencidos(){
+        LocalDate hoy =LocalDate.now();
+        Set<ContractEntity> contratosVencidos =
+                contractRepository.findAllByFinishDateIsBeforeAndStatusIsTrue(hoy);
+        if(contratosVencidos.isEmpty()){
+            return;
+        }
+        for (ContractEntity contrato:contratosVencidos){
+            contrato.setStatus(false);
+        }
+        contractRepository.saveAll(contratosVencidos);
+        System.out.println("se actualizaron "+ contratosVencidos.size()+"vencidos");
 
     }
 

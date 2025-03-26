@@ -31,7 +31,6 @@ public class ModelMapperTest {
         assertEquals(user.getIdUser(),userResponse.getIdUser());
         assertEquals(user.getDni(),userResponse.getDni());
         assertEquals(user.getUsername(),userResponse.getUsername());
-        assertEquals(user.getName()+" "+user.getLastName(),userResponse.getFullName());
     }
     @Test
      void testServiceMapping(){

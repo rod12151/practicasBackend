@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import practicas.gestion_personal.domain.entities.AssignmentUserServiceEntity;
+import practicas.gestion_personal.domain.entities.HeadServiceEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -41,4 +43,7 @@ public interface AssignmentUserServiceRepository extends JpaRepository<Assignmen
 
     @Query("select us from usuarioServicio us where us.status=true and us.user.dni=:dni and us.service.code=:service ")
     Optional<AssignmentUserServiceEntity>  selectByDniCoDeServiceExist(@Param("dni") String dni,@Param("service") String service);
+
+    Set<AssignmentUserServiceEntity> findAllByFinishDateIsBeforeAndStatusIsTrue(LocalDate fechaFin);
+
 }

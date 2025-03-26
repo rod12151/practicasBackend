@@ -16,4 +16,6 @@ public interface AssignmentUserServiceService {
     Set<AssignmentUserServiceResponse> findAllWhitFilter(String assign, String filter);
     void forceTerminateAssign(String id);
 
+    void actualizarAsignacionesVencidas();
+
 }

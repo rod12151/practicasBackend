@@ -1,7 +1,9 @@
 package practicas.gestion_personal.infraestructure.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicas.gestion_personal.api.models.request.HeadServiceCreateRequest;
 import practicas.gestion_personal.api.models.response.HeadServiceResponse;
 import practicas.gestion_personal.domain.entities.*;
@@ -165,9 +167,28 @@ return null;
         List<HeadServiceResponse> response = new ArrayList<>();
         for (HeadServiceEntity res : bossList) {
             HeadServiceResponse aux = headServiceMapping.headServiceEntityToResponse(res);
-            response.add(aux);
+
         }
         return response;
 
     }
-}
+
+    @Override
+    @Scheduled(cron = "0 0 0 * * ?") // A medianoche todos los días
+    @Transactional
+    public void actualizarJefeServicioFinContrato() {
+        LocalDate hoy = LocalDate.now();
+        Set<HeadServiceEntity> headServiceVencidos=
+                headServiceRepository.findAllByFinishDateIsBeforeAndStatusIsTrue(hoy);
+        if(headServiceVencidos.isEmpty()){
+            return;
+        }
+        for(HeadServiceEntity headService:headServiceVencidos){
+            headService.setStatus(false);
+            String user =headService.getUser().getDni();
+                    userService.deleteRoleUser(user,ROLE_JEFE);
+        }
+        headServiceRepository.saveAll(headServiceVencidos);
+        System.out.println("se actualizaron "+ headServiceVencidos.size()+" jefes de servicio vencidos");
+
+    }}
